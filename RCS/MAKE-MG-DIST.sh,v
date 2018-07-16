@@ -1,0 +1,85 @@
+head	1.2;
+access;
+symbols;
+locks
+	beebe:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2004.10.31.00.21.13;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.31.00.21.05;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@#! /bin/sh
+### ====================================================================
+### Make an mg 1.3x distribution file containing binaries and manual
+### pages for a specified architecture.
+###
+### Usage:
+###	./MAKE-MG-DIST.sh tar-file-name [ otherfiles ]
+###
+### [30-Oct-2004] -- update for version mg-1.3.64x and location
+###		     independence
+### [17-May-1997]
+### ====================================================================
+
+prefix=${prefix-/usr/local}
+
+if test $# -lt 1
+then
+    echo Usage: $0 tar-file-name [ otherfiles ]
+    exit 1
+fi
+
+TOP=`dirname $0`/mg-1.3.64x
+
+tarfile=$1
+shift
+
+tar cf $tarfile \
+	-C $TOP "$@@" \
+	-C $prefix `cat $TOP/MAKE-MG-DIST.bin-files` \
+	-C $prefix `cat $TOP/MAKE-MG-DIST.man-files`
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d1 14
+a14 8
+#! /bin/sh 
+# Make an mg 1.3x distribution file containing binaries and manual pages
+# for a specified architecture.
+#
+# Usage:
+#	./MAKE-MG-DIST.sh tar-file-name [ otherfiles ]
+#
+# [17-May-1997]
+d22 1
+a22 1
+TOP=/usr/local/src/mg/mg-1.3x
+d29 2
+a30 2
+	-C /usr/local `cat $TOP/MAKE-MG-DIST.bin-files` \
+	-C /usr/local `cat $TOP/MAKE-MG-DIST.man-files`
+@

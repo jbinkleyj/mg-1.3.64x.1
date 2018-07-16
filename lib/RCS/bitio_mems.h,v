@@ -1,0 +1,186 @@
+head	1.2;
+access;
+symbols;
+locks
+	beebe:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2004.10.31.00.11.04;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.30.21.11.14;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@/**************************************************************************
+ *
+ * bitio_mems.h -- Functions for bitio to memory (random access)
+ * Copyright (C) 1994  Neil Sharman
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * $Id: bitio_mems.h,v 1.1 2004/10/30 21:11:14 beebe Exp beebe $
+ *
+ **************************************************************************
+ *
+ *  This file contains function definitions for doing bitwise input and output
+ *  of numbers on an array of chars. These routines are slower than the ones 
+ *  in "mem" files. but with these routines you can mix reads and writes, or 
+ *  multiple writes,  on the array of chars at the same time and guarantee
+ *  them to work, also you can seek to a point and do a write. The decode and 
+ *  encode functions cannot detect when the end off the character is reached
+ *  and just continue processing.
+ *
+ **************************************************************************/
+
+#ifndef H_BITIO_MEMS
+#define H_BITIO_MEMS
+
+
+
+typedef struct mems_bitio_state
+  {
+    unsigned char *Base;
+    MG_u_long_t pos;
+  }
+mems_bitio_state;
+
+
+/* NOTE : All bytes are filled high bit first */
+
+
+void BIO_Mems_Encode_Start (char *buf, MG_u_long_t pos, mems_bitio_state * bs);
+void BIO_Mems_Encode_Done (mems_bitio_state * bs);
+
+
+
+void BIO_Mems_Decode_Start (void *buf, MG_u_long_t pos, mems_bitio_state * bs);
+
+
+
+void BIO_Mems_Unary_Encode (MG_u_long_t val, mems_bitio_state * bs,
+			    MG_u_long_t *bits);
+MG_u_long_t BIO_Mems_Unary_Decode (mems_bitio_state * bs,
+				     MG_u_long_t *bits);
+
+
+
+void BIO_Mems_Binary_Encode (MG_u_long_t val, MG_u_long_t b,
+			     mems_bitio_state * bs, MG_u_long_t *bits);
+MG_u_long_t BIO_Mems_Binary_Decode (MG_u_long_t b, mems_bitio_state * bs,
+				      MG_u_long_t *bits);
+
+
+
+void BIO_Mems_Gamma_Encode (MG_u_long_t val, mems_bitio_state * bs,
+			    MG_u_long_t *bits);
+MG_u_long_t BIO_Mems_Gamma_Decode (mems_bitio_state * bs, MG_u_long_t *bits);
+
+
+
+void BIO_Mems_Delta_Encode (MG_u_long_t val, mems_bitio_state * bs,
+			    MG_u_long_t *bits);
+MG_u_long_t BIO_Mems_Delta_Decode (mems_bitio_state * bs, MG_u_long_t *bits);
+
+
+void BIO_Mems_Elias_Encode (MG_u_long_t val, MG_u_long_t b, double s,
+			    mems_bitio_state * bs, MG_u_long_t *bits);
+MG_u_long_t BIO_Mems_Elias_Decode (MG_u_long_t b, double s,
+				mems_bitio_state * bs, MG_u_long_t *bits);
+
+
+void BIO_Mems_Bblock_Encode (MG_u_long_t val, MG_u_long_t b,
+			     mems_bitio_state * bs, MG_u_long_t *bits);
+MG_u_long_t BIO_Mems_Bblock_Decode (MG_u_long_t b, mems_bitio_state * bs,
+				      MG_u_long_t *bits);
+
+
+void BIO_Mems_Decode_Seek (MG_u_long_t pos, mems_bitio_state * bs);
+
+
+#endif
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d20 1
+a20 1
+ * $Id: bitio_mems.h,v 1.2 1994/09/20 04:19:57 tes Exp $
+d42 1
+a42 1
+    unsigned long pos;
+d50 1
+a50 1
+void BIO_Mems_Encode_Start (char *buf, unsigned long pos, mems_bitio_state * bs);
+d55 1
+a55 1
+void BIO_Mems_Decode_Start (void *buf, unsigned long pos, mems_bitio_state * bs);
+d59 4
+a62 4
+void BIO_Mems_Unary_Encode (unsigned long val, mems_bitio_state * bs,
+			    unsigned long *bits);
+unsigned long BIO_Mems_Unary_Decode (mems_bitio_state * bs,
+				     unsigned long *bits);
+d66 4
+a69 4
+void BIO_Mems_Binary_Encode (unsigned long val, unsigned long b,
+			     mems_bitio_state * bs, unsigned long *bits);
+unsigned long BIO_Mems_Binary_Decode (unsigned long b, mems_bitio_state * bs,
+				      unsigned long *bits);
+d73 3
+a75 3
+void BIO_Mems_Gamma_Encode (unsigned long val, mems_bitio_state * bs,
+			    unsigned long *bits);
+unsigned long BIO_Mems_Gamma_Decode (mems_bitio_state * bs, unsigned long *bits);
+d79 3
+a81 3
+void BIO_Mems_Delta_Encode (unsigned long val, mems_bitio_state * bs,
+			    unsigned long *bits);
+unsigned long BIO_Mems_Delta_Decode (mems_bitio_state * bs, unsigned long *bits);
+d84 4
+a87 4
+void BIO_Mems_Elias_Encode (unsigned long val, unsigned long b, double s,
+			    mems_bitio_state * bs, unsigned long *bits);
+unsigned long BIO_Mems_Elias_Decode (unsigned long b, double s,
+				mems_bitio_state * bs, unsigned long *bits);
+d90 4
+a93 4
+void BIO_Mems_Bblock_Encode (unsigned long val, unsigned long b,
+			     mems_bitio_state * bs, unsigned long *bits);
+unsigned long BIO_Mems_Bblock_Decode (unsigned long b, mems_bitio_state * bs,
+				      unsigned long *bits);
+d96 1
+a96 1
+void BIO_Mems_Decode_Seek (unsigned long pos, mems_bitio_state * bs);
+@

@@ -1,0 +1,217 @@
+head	1.2;
+access;
+symbols;
+locks
+	beebe:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2004.10.31.00.11.04;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.30.21.11.14;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@/**************************************************************************
+ *
+ * bitio_random.h -- Functions for bitio to a file (random access)
+ * Copyright (C) 1994  Neil Sharman
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * $Id: bitio_random.h,v 1.1 2004/10/30 21:11:14 beebe Exp beebe $
+ *
+ **************************************************************************
+ *
+ *  This file contains function definitions for doing bitwise input and output
+ *  of numbers on an array of chars. These routines are slower than the ones 
+ *  in "mem" files. but with these routines you can mix reads and writes, or 
+ *  multiple writes,  on the array of chars at the same time and guarantee
+ *  them to work, also you can seek to a point and do a write. The decode and 
+ *  encode functions cannot detect when the end off the character is reached
+ *  and just continue processing.
+ *
+ **************************************************************************/
+
+#ifndef H_BITIO_RANDOM
+#define H_BITIO_RANDOM
+
+
+
+typedef struct random_bitio_state
+  {
+    FILE *File;
+    unsigned char *Buf;
+    MG_u_long_t Base;
+    MG_u_long_t Used;
+    MG_u_long_t pos;
+    MG_u_long_t len;
+    MG_u_long_t sft;
+  }
+random_bitio_state;
+
+
+/* NOTE : All bytes are filled high bit first */
+
+
+void BIO_Random_Start (FILE * f, MG_u_long_t len,
+		       random_bitio_state * bs);
+void BIO_Random_Done (random_bitio_state * bs);
+
+
+
+void BIO_Random_Decode_Start (void *buf, MG_u_long_t pos,
+			      random_bitio_state * bs);
+
+void BIO_Random_Encode_Bit (int bit, random_bitio_state * bs);
+
+int BIO_Random_Decode_Bit (random_bitio_state * bs);
+
+
+void BIO_Random_Unary_Encode (MG_u_long_t val, random_bitio_state * bs,
+			      MG_u_long_t *bits);
+MG_u_long_t BIO_Random_Unary_Decode (random_bitio_state * bs,
+				       MG_u_long_t *bits);
+
+
+
+void BIO_Random_Binary_Encode (MG_u_long_t val, MG_u_long_t b,
+			       random_bitio_state * bs, MG_u_long_t *bits);
+MG_u_long_t BIO_Random_Binary_Decode (MG_u_long_t b, random_bitio_state * bs,
+					MG_u_long_t *bits);
+
+
+
+void BIO_Random_Gamma_Encode (MG_u_long_t val, random_bitio_state * bs,
+			      MG_u_long_t *bits);
+MG_u_long_t BIO_Random_Gamma_Decode (random_bitio_state * bs,
+				       MG_u_long_t *bits);
+
+
+
+void BIO_Random_Delta_Encode (MG_u_long_t val, random_bitio_state * bs,
+			      MG_u_long_t *bits);
+MG_u_long_t BIO_Random_Delta_Decode (random_bitio_state * bs,
+				       MG_u_long_t *bits);
+
+
+void BIO_Random_Elias_Encode (MG_u_long_t val, MG_u_long_t b, double s,
+			      random_bitio_state * bs, MG_u_long_t *bits);
+MG_u_long_t BIO_Random_Elias_Decode (MG_u_long_t b, double s,
+				       random_bitio_state * bs,
+				       MG_u_long_t *bits);
+
+
+void BIO_Random_Bblock_Encode (MG_u_long_t val, MG_u_long_t b,
+			       random_bitio_state * bs, MG_u_long_t *bits);
+MG_u_long_t BIO_Random_Bblock_Decode (MG_u_long_t b,
+					random_bitio_state * bs,
+					MG_u_long_t *bits);
+
+
+void BIO_Random_Seek (MG_u_long_t pos, random_bitio_state * bs);
+
+void BIO_Random_Flush (random_bitio_state * bs);
+
+MG_u_long_t BIO_Random_Tell (random_bitio_state * bs);
+
+
+#endif
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d20 1
+a20 1
+ * $Id: bitio_random.h,v 1.2 1994/09/20 04:19:58 tes Exp $
+d43 5
+a47 5
+    unsigned long Base;
+    unsigned long Used;
+    unsigned long pos;
+    unsigned long len;
+    unsigned long sft;
+d55 1
+a55 1
+void BIO_Random_Start (FILE * f, unsigned long len,
+d61 1
+a61 1
+void BIO_Random_Decode_Start (void *buf, unsigned long pos,
+d69 4
+a72 4
+void BIO_Random_Unary_Encode (unsigned long val, random_bitio_state * bs,
+			      unsigned long *bits);
+unsigned long BIO_Random_Unary_Decode (random_bitio_state * bs,
+				       unsigned long *bits);
+d76 4
+a79 4
+void BIO_Random_Binary_Encode (unsigned long val, unsigned long b,
+			       random_bitio_state * bs, unsigned long *bits);
+unsigned long BIO_Random_Binary_Decode (unsigned long b, random_bitio_state * bs,
+					unsigned long *bits);
+d83 4
+a86 4
+void BIO_Random_Gamma_Encode (unsigned long val, random_bitio_state * bs,
+			      unsigned long *bits);
+unsigned long BIO_Random_Gamma_Decode (random_bitio_state * bs,
+				       unsigned long *bits);
+d90 4
+a93 4
+void BIO_Random_Delta_Encode (unsigned long val, random_bitio_state * bs,
+			      unsigned long *bits);
+unsigned long BIO_Random_Delta_Decode (random_bitio_state * bs,
+				       unsigned long *bits);
+d96 3
+a98 3
+void BIO_Random_Elias_Encode (unsigned long val, unsigned long b, double s,
+			      random_bitio_state * bs, unsigned long *bits);
+unsigned long BIO_Random_Elias_Decode (unsigned long b, double s,
+d100 1
+a100 1
+				       unsigned long *bits);
+d103 3
+a105 3
+void BIO_Random_Bblock_Encode (unsigned long val, unsigned long b,
+			       random_bitio_state * bs, unsigned long *bits);
+unsigned long BIO_Random_Bblock_Decode (unsigned long b,
+d107 1
+a107 1
+					unsigned long *bits);
+d110 1
+a110 1
+void BIO_Random_Seek (unsigned long pos, random_bitio_state * bs);
+d114 1
+a114 1
+unsigned long BIO_Random_Tell (random_bitio_state * bs);
+@

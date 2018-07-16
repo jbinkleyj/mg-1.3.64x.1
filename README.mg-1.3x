@@ -1,0 +1,364 @@
+%% /usr/local/src/mg/mg-1.3x/README.mg-1.3x, Mon May 26 14:22:22 1997
+%% Edit by Nelson H. F. Beebe <beebe@saetta.math.utah.edu>
+
+========
+PROBLEMS
+========
+
+Any problems encountered with installation of mg-1.3x should be
+reported directly to
+
+	Nelson H. F. Beebe
+	Center for Scientific Computing
+	Department of Mathematics
+	University of Utah
+	Salt Lake City, UT 84112
+	USA
+	Email: beebe@math.utah.edu (Internet)
+	WWW URL: http://www.math.utah.edu/~beebe
+
+Problems with mg-1.3 should be reported on the mg mailing list
+
+	mg-users@mds.rmit.edu.au
+
+since having a larger based of problem solvers reduces the burden on
+the mg developers.
+
+
+========================
+HOW TO MAKE VERSION 1.3x
+========================
+
+Version 1.3x of mg can be created by the application of a set of
+patches in this distribution to a directory tree containing the mg 1.3
+distribution from the New Zealand Digital Library project at the
+University of Waikato at
+
+	http://www.cs.waikato.ac.nz/~nzdl/technology/mg-1.3.tar.gz
+
+Fetch that tar file and install in an clean directory like this:
+
+	gunzip <mg-1.3.tar.gz | tar xf -
+
+or, if you have GNU tar,
+
+	tar xfz mg-1.3.tar.gz
+
+Next, rename the directory to reflect the patched version:
+
+	mv mg-1.3 mg-1.3x
+
+Install the patches to convert 1.3 to 1.3x:
+
+	patch <...whereever.../mg-1.3-to-1.3x.patch 
+
+If your system does not have patch, you can find it at
+
+	ftp://prep.ai.mit.edu/pub/gnu/patch-2.2.tar.gz
+
+Finally, build mg-1.3x like this:
+
+	cd mg-1.3x
+	./configure && make
+
+If that succeeds, do
+
+	make install
+
+
+====================
+WHAT THE CHANGES ARE
+====================
+
+Here is a brief summary of the main points of the patches:
+
+(1) Use GNU readline (available in the GDB distribution at
+prep.ai.mit.edu), or in an apparently divergent development
+at ftp://prep.ai.mit.edu/pub/gnu/readline-2.0.tar.gz so that
+searches in mgquery can permit command editing and recall.
+
+(2) Provide depend targets in all Makefile.in files.  You can do "make
+depend" after the configure step to get file dependencies added to the
+Makefiles, although it is not necessary to do so unless you plan to
+modify the source code.
+
+(3) Add GNU standard targets to all Makefile and Makefile.in files.
+
+(4) Add support in configure and configure.in for automatic
+recognition of little-endian hosts (e.g. DECstation Ultrix). This
+should also work for Linux hosts on Intel platforms, but I have no way
+to test it.  This change permits little-endian hosts to read binary
+databases created on big-endian hosts.
+
+(5) Update the version number from 1.2 (which should have been 1.3) to
+1.3x in configure.in.
+
+(6) Increase the set of characters permitted in words to include
+hyphen, underscore, backslash, and apostrophe, and increase the length
+of numeric strings that can be stored.  This supports searching for
+names like Houghton-Mifflin, a_long_variable_name, \LaTeX, and
+O'Reilly, as well as for ISBN (0-442-01863-0) and ISSN (1061-5733)
+data.
+
+
+=====================================
+READY-TO-INSTALL BINARY DISTRIBUTIONS
+=====================================
+
+For user convenience, binary distributions for common UNIX platforms
+are available at
+
+	ftp://ftp.math.utah.edu/pub/mg/mg-1.3x
+
+in these files:
+
+	mg-1.3x.NeXT-Mach-3.3.tar.gz
+	mg-1.3x.dec-alpha-osf1-3.2.tar.gz [NB: See below for this system]
+	mg-1.3x.dec-alpha-osf1-4.0.tar.gz [NB: See below for this system]
+	mg-1.3x.dec-mips-ultrix-4.3.tar.gz
+	mg-1.3x.hp-parisc11-hpux-10.01.tar.gz
+	mg-1.3x.sgi-mips-irix-5.3.tar.gz
+	mg-1.3x.sgi-mips-irix-6.2.tar.gz
+	mg-1.3x.sun-sparc-solaris-2.5.tar.gz
+	mg-1.3x.sun-sparc-sunos-4.1.3.tar.gz
+
+Each of these is expected to be unpacked in /usr/local, and will
+install files in /usr/local/bin and /usr/local/man/man1.  For example,
+
+	cd /usr/local
+	gunzip <mg-1.3x.sun-sparc-solaris-2.5.tar.gz | tar xf -
+
+or if you have GNU tar
+
+	cd /usr/local
+	tar xfz mg-1.3x.sun-sparc-solaris-2.5.tar.gz
+
+
+=========================================
+WHY MG DOES NOT WORK ON DEC ALPHA SYSTEMS
+=========================================
+
+Although mg will compile and link successfully, no version of mg (up
+to 1.3x) will work correctly on DEC Alpha systems running OSF/1 3.x or
+4.x, and likely also, OpenVMS, and possibly, Windows NT, using binary
+databases constructed on other architectures.
+
+There are at least four problems:
+
+	(1) There are more than 600 instances of "long int" type
+	declarations in each of the lib and src source code trees, as
+	illustrated by:
+
+	% cat lib/*.[ch] | grep -c '[^a-zA-Z]long[^a-zA-Z]' 
+	641
+
+	% cat src/*/*.[ch] | grep -c '[^a-zA-Z]long[^a-zA-Z]'
+	684
+
+	Some of these data types are read from, or written to, the binary
+	database files.  On the DEC Alpha, "long" is a 64-bit value, unlike
+	Silicon Graphics IRIX 6.x, where it remains a 32-bit value.  Databases
+	constructed on other architectures will have only 32-bit long data, so
+	an Alpha version of mgquery will read extra garbage from such files
+	and quickly die.
+
+	(2) Failure of earlier mg releases on the DEC Alpha will arise
+	because this architecture is little-endian, and the data in
+	the binary databases is byte-order dependent.  Support for
+	little-endian architectures was added to mg 1.3, but configure
+	did not handle it properly until mg 1.3x.
+
+	(3) The regular expression parser, lib/rx.c, sloppily stores
+	pointers in variables of type int. On the DEC Alpha, pointers
+	are always 64-bit values, and ints are 32-bit values.  By
+	default, pointers have at least one non-zero bit in the upper
+	32 bits; that choice was made intentionally by DEC to catch
+	programs that make the assumption that sizeof(int) ==
+	sizeof(void*).
+
+	(4) There are assumptions elsewhere in the mg source code that
+	pointers and integers can be interchanged.  For example,
+	before writing structures with embedded pointers out to binary
+	files, mg converts those pointers to unsigned long offsets.
+	On input from the binary files, the offsets are converted back
+	to pointers.  This appears to happen in only two source files,
+	both related to the optional fast loading compression
+	dictionary, in src/text/mg_fast_comp_dict.c and
+	src/text/text_get.c.  When the fast compression dictionary is
+	written, a memory chunk containing several C struct's, each of
+	which contains pointers that have been altered to offsets, is
+	written by a single call to fwrite().  This means that the
+	fast compression dictionary file contains struct entries that
+	have pointer sizes, which is why the DEC Alpha version with
+	its 64-bit pointers cannot correctly read such a file created
+	on a 32-bit pointer architecture.
+
+Fixing problem (1) is not likely to be easy, because potentially
+all 1325 instances of "long" declarations in the source code need to
+be examined to see whether they could be replaced on this architecture
+by "int", or better, by a new type, say mg_long, that is typedef'ed to
+long on most architectures, but to int on the DEC Alpha.  
+
+Problem (2) been already been fixed in mg 1.3x; see point (4) in WHAT
+THE CHANGES ARE above.
+
+Problem (3) can be fixed by using the -taso compiler option to
+force all pointer values into the lower 32 bits, thereby providing a
+simple workaround for the erroneous assumption, sizeof(int) ==
+sizeof(void*).  The C compiler manual page contains this description:
+
+>> ...
+>>   -taso
+>>       Tell the linker that the executable file should be loaded in the lower
+>>       31-bit addressable virtual address range. The -T and -D flags to the ld
+>>       command can also be used to ensure that the text and data segments
+>>       addresses, respectively, are loaded into low memory.
+>>  
+>>       The -taso flag, however, in addition to setting default addresses for
+>>       text and data segments, also causes shared libraries linked outside the
+>>       31-bit address space to be appropriately relocated by the loader. If
+>>       you specify -taso and also specify text and data segment addresses with
+>>       -T and -D, those addresses override the -taso default addresses. The
+>>       -taso flag is useful for porting 32-bit programs to DEC OSF/1.
+>> ...
+
+Problem (4) is considerably more difficult, and is discussed further below.
+	
+These observations suggest a possible brute-force attack to complete
+a port of mg 1.3x to the DEC Alpha:
+
+	(1) Change all "long" variables to "mg_long", and all "u_long"
+	variables to "mg_u_long", and then at compile time, or in the
+	config.h file, define mg_long to be int for this system, and
+	long for others.  A suitable sed script to do this on
+	(a COPY of) the mg 1.3x source tree is included as the
+	file long-to-mg_long.sh in this distribution.  It can be
+	run like this:
+
+		cd wherever-you-put-the-COPY-of-mg-1.3x
+		./long-to-mg_long.sh
+
+	These changes will be incorrect where there are calls to
+	library functions that expect long arguments.  Fortunately,
+	Standard C prototypes will produce correct promotion in all
+	but the case of the *printf() functions, where %l<letter>
+	format items must have a corresponding long argument.  These
+	cases must be separately identified and corrected [there 64 %l
+	format items in the source code].  [NB: This has NOT yet been
+	done in the preliminary port of mg 1.3x to the DEC Alpha.]
+
+	(2) Build the program with pointers restricted to the lower
+	32-bits, so that they can be copied in and out of int
+	variables without bit loss:
+
+		env CC='cc -D_OSF_SOURCE -Dmg_long=int -ieee_with_inexact -taso' ./configure && make
+	
+	The -ieee_with_inexact switch is needed to get IEEE 754
+	behavior so that mg can correctly handle NaN and Infinity;
+	they are both possible in statistics computation from
+	terms of the form 0/0 and x/0.  Otherwise, the DEC Alpha
+	terminates process execution when those expressions are
+	evaluated.
+
+I tried this, and it DOES produce a working mgquery that can read
+binary databases created on a 32-bit big-endian system, PROVIDED that
+the fast-loading index has not been built.  
+
+However, if that file (*.text.dict.fast) exists, then mgquery core
+dumps with this traceback:
+
+signal Segmentation fault at   [Load_Fast_Comp_Dict:760 +0x18,0x1202085c]       NTOHSI(cd->cfh[i]->hd.num_codes);
+(dbx) where
+>  0 Load_Fast_Comp_Dict(text_fast_comp_dict = 0x14024c40) ["text_get.c":760, 0x1202085c]
+   1 LoadCompDict(text_comp_dict = (nil), text_aux_dict = (nil), text_fast_comp_dict = 0x14024c40) ["text_get.c":804, 0x12020d5c]
+   2 InitQuerySystem(dir = 0x140268c0 = "/tmp/mg/mgdata/", name = 0x14025ea0 = "bibfiles/bibfiles", iqt = 0x11ffea20) ["backend.c":359, 0x12025324]
+   3 query() ["mgquery.c":1127, 0x12011a80]
+   4 main(argc = 2, argv = 0x11ffec08) ["mgquery.c":1412, 0x12012c94]
+
+Further study of the code reveals the problem: in mg_fast_comp_dict.c,
+in function save_fast_dict(), pointers are replaced by their offsets.
+In text_get.c, in function Load_Fast_Comp_Dict(), those offsets are
+replaced by pointers.  As long as the original pointer is non-NULL,
+this is correct.  However, when the pointer is NULL, the computed
+offset, NULL - base, will be negative, or equivalently, a large
+unsigned value.  The solution is to modify Load_Fast_Comp_Dict() to
+check the expression ((mg_long)offset < 0) to detect cases when the
+reconstructed pointer should be a NULL, rather than a bogus value that
+points below the base address.  This error has been fixed in the mg
+1.3x distribution, since it potentially affects other architectures
+too.
+
+With this change, mg 1.3x now works correctly on the DEC Alpha, as
+long as the fast loading compression dictionary is NOT used.
+
+There are two other compiler options that may eventually lead to a
+solution of the problem of making mg work properly on this
+architecture:
+
+>> ...
+>>   -xtaso
+>>       Cause the compiler to respond to the #pragma pointer_size preprocessor
+>>       directives which control pointer size allocations.  This flag allows
+>>       you to specify 32-bit pointers when used in conjunction with the pragma
+>>       pointer_size directive. You must place pragmas where appropriate in
+>>       your program to use 32-bit pointers. Images built with this flag must
+>>       be linked with the -taso flag in order to run correctly. See the Pro-
+>>       grammer's Guide for information on #pragma pointer_size.
+>>  
+>>   -xtaso_short
+>>       Force the compiler to allocate 32-bit pointers by default. You can
+>>       still use 64-bit pointers, but only by the use of pragmas.
+>> ...
+
+Experiments with small test programs show that it is not sufficient to
+use -xtaso_short, because the short pointers thus created are not
+handled correctly by C library routines, and segment violations
+immediately provoke core dumps.
+
+I made an experiment with insertion of
+
+#if defined(__alpha)
+#pragma pointer_size save
+#pragma pointer_size short
+#endif
+
+...
+
+#if defined(__alpha)
+#pragma pointer_size restore
+#endif
+
+around structures in src/text/backend.h to try to get the pointers
+involved in the fast loading compression dictionary to be 32-bit
+values instead of 64-bit values, and I also changed the definition of
+WORDNO in src/text/mg_fast_comp_dict.c and src/text/text_get.c to
+
+#if defined(__alpha)
+#pragma pointer_size save
+#pragma pointer_size short
+static size_t MG_POINTER_SIZE = sizeof(u_char*);
+#pragma pointer_size restore
+#else
+#define MG_POINTER_SIZE sizeof(u_char*)
+#endif
+
+#define WORDNO(p, base) ((((char*)(p))-((char*)(base)))/MG_POINTER_SIZE)
+
+This produced an executable that successfully read the fast loading
+compression dictionary, but then later failed elsewhere with invalid
+addresses.  This suggests that further pursuit of this approach might
+eventually provide a solution.
+
+However, it is my belief that since most other RISC vendors are moving
+toward 64-bit software architectures (DEC Alpha, SGI MIPS R4x00 and
+later, and SUN UltraSPARC already have 64-bit hardware), this problem
+will soon strike newer systems from those vendors too, and will best
+be addressed by a complete rewrite of the two routines
+src/text/mg_fast_comp_dict.c and src/text/text_get.c to avoid pointers
+altogether in the fast loading compression dictionary file.
+
+At the same time, thought needs to be given to the entire idea of
+32-bit longs vs 64-bit longs, so that the `Managing Gigabytes'
+software can actually work on more than two gigabytes (== 2^{31} - 1)
+of data, which is the current limit imposed by signed longs and
+offsets in the binary files.

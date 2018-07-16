@@ -1,0 +1,22 @@
+mg 1.3x has been successfully built on NeXT Mach 3.3, but only after
+several painful experiments to find compiler options that would work
+around NeXT's horrid bugs.  The NeXT has always been seriously
+brain-damaged because of errors in the C header files and libraries.
+
+I found that
+
+	./configure
+	make CC='cc -DINT_MAX=0x7fffffff'
+	ar d lib/libmg.a gmalloc.o
+	ranlib -s lib/libmg.a
+	make CC='cc -DINT_MAX=0x7fffffff'
+
+seems to do the trick.
+
+The symbol INT_MAX is defined only in the Standard C environment (cc
+-ansi), but in that environment, <ctype.h> expands isascii() to a
+function instead of a macro, and that function is absent from the
+system libraries, sigh...
+
+Deletion of the gmalloc.o member of the libmg.a library is necessary
+to prevent fatal linker duplicate-symbol conflicts.

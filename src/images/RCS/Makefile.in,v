@@ -1,0 +1,542 @@
+head	1.4;
+access;
+symbols;
+locks
+	beebe:1.4; strict;
+comment	@# @;
+
+
+1.4
+date	2006.01.14.17.51.40;	author beebe;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2004.11.01.14.45.59;	author beebe;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2004.10.31.00.12.38;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.31.00.12.25;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.4
+log
+@Add $(COMPILEFLAGS) to LINK step (needed to preserve compiler architecture flags).
+@
+text
+@###########################################################################
+#
+# Makefile.in -- Makefile for the MG system
+# Copyright (C) 1994  Neil Sharman
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+#       @@(#)Makefile.in	1.10 22 Mar 1994
+#
+###########################################################################
+
+PACKAGE = @@PACKAGE@@
+VERSION = @@VERSION@@
+
+SHELL = /bin/sh
+VPATH = @@srcdir@@
+exec_prefix = @@exec_prefix@@
+prefix = @@prefix@@
+srcdir = @@srcdir@@
+subdir = src/images
+top_srcdir = @@top_srcdir@@
+transform = @@program_transform_name@@
+
+CC = @@CC@@
+CFLAGS = @@CFLAGS@@
+CPPFLAGS = @@CPPFLAGS@@
+DEFS = @@DEFS@@
+INSTALL = @@INSTALL@@
+INSTALL_DATA = @@INSTALL_DATA@@
+INSTALL_PROGRAM = @@INSTALL_PROGRAM@@
+LDFLAGS = @@LDFLAGS@@
+LIBS = -L$(prefix)/lib $(LIBMG) @@LIBS@@
+LIBMG = ../../lib/libmg.a
+TOUCH = echo timestamp >
+
+bindir = $(exec_prefix)/bin
+datadir = $(prefix)/share
+libexecdir = $(exec_prefix)/libexec
+localedir = $(datadir)/locale
+mandir = $(prefix)/man/man1
+
+COMPILEFLAGS = $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+COMPILE = $(CC) -c $(COMPILEFLAGS)
+LINK = $(CC) $(COMPILEFLAGS) $(LDFLAGS) -o $@@
+
+.SUFFIXES:
+.SUFFIXES: .c .o
+.c.o:
+	$(COMPILE) $<
+
+ANSI2KNR = @@ANSI2KNR@@
+o = .@@U@@o
+
+.SUFFIXES: ._c ._o
+.c._c:
+	./ansi2knr $< > $*.tmp && mv $*.tmp $@@
+._c._o:
+	@@echo $(COMPILE) $<
+	@@rm -f _$*.c
+	@@ln $< _$*.c && $(COMPILE) _$*.c && mv _$*.o $@@ && rm _$*.c
+.c._o:
+	./ansi2knr $< > $*.tmp && mv $*.tmp $*._c
+	@@echo $(COMPILE) $*._c
+	@@rm -f _$*.c
+	@@ln $*._c _$*.c && $(COMPILE) _$*.c && mv _$*.o $@@ && rm _$*.c
+
+INCLUDES = -I$(srcdir) -I../.. -I../../lib
+
+SOURCES = \
+  arithcode.c     extractor.c     mgbilevel.c     mgticdump.c     utils.c \
+  bilevel.c       felics.c        mgfelics.c      mgticprune.c    mgticstat.c\
+  codeoffsets.c   marklist.c      mgtic.c         pbmtools.c      lstevent.c \
+  codesyms.c      match.c         mgticbuild.c    sortmarks.c     ppm.c
+
+HEADERS = \
+  arithcode.h     codeoffsets.h   marklist.h      sortmarks.h \
+  basictypes.h    codesyms.h      match.h         utils.h     \
+  bilevel.h       extractor.h     pbmtools.h      model.h
+
+MISC          = Makefile.in
+
+ALLFILES      =	$(SOURCES) $(HEADERS) $(MISC) $(MAN)
+
+DISTFILES     = $(ALLFILES)
+
+EXEC          = mgfelics mgbilevel mgtic mgticbuild mgticprune mgticstat \
+                mgticdump
+
+MAN           = mgfelics.1 mgbilevel.1 mgtic.1 mgticbuild.1  mgticprune.1 \
+                mgticstat.1 mgticdump.1
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+all: $(EXEC)
+
+check:
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+FELICS_OBJS = felics$o mgfelics$o utils$o
+
+mgfelics: $(FELICS_OBJS) $(LIBMG)
+	$(LINK) $(FELICS_OBJS) $(LIBS)
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+BILEVEL_OBJS = \
+	arithcode$o bilevel$o extractor$o marklist$o mgbilevel$o \
+	pbmtools$o utils$o
+
+mgbilevel: $(BILEVEL_OBJS) $(LIBMG)
+	$(LINK) $(BILEVEL_OBJS) $(LIBS)
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+TIC_OBJS = \
+	mgtic$o extractor$o marklist$o pbmtools$o utils$o match$o \
+	sortmarks$o codesyms$o ppm$o lstevent$o arithcode$o codeoffsets$o bilevel$o
+
+mgtic: $(TIC_OBJS) $(LIBMG)
+	$(LINK) $(TIC_OBJS) $(LIBS)
+
+TICBUILD_OBJS = mgticbuild$o extractor$o marklist$o pbmtools$o utils$o
+
+mgticbuild: $(TICBUILD_OBJS) $(LIBMG)
+	$(LINK) $(TICBUILD_OBJS) $(LIBS)
+
+TICPRUNE_OBJS = \
+	mgticprune$o extractor$o marklist$o pbmtools$o \
+	utils$o match$o
+
+mgticprune: $(TICPRUNE_OBJS) $(LIBMG)
+	$(LINK) $(TICPRUNE_OBJS) $(LIBS)
+
+TICSTAT_OBJS = mgticstat$o extractor$o marklist$o pbmtools$o utils$o
+
+mgticstat: $(TICSTAT_OBJS) $(LIBMG)
+	$(LINK) $(TICSTAT_OBJS) $(LIBS)
+
+TICDUMP = mgticdump$o extractor$o marklist$o pbmtools$o utils$o
+
+mgticdump: $(TICDUMP) $(LIBMG)
+	$(LINK) $(TICDUMP) $(LIBS)
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+ansi2knr: ansi2knr.o $(LIBMG)
+	$(LINK) ansi2knr.o $(LIBS)
+
+install: execinstall maninstall
+uninstall: execuninstall manuninstall
+
+execinstall: $(EXEC)
+	$(top_srcdir)/mkinstalldirs $(bindir); \
+	for name in $(EXEC); do \
+	  $(INSTALL_PROGRAM) $$name \
+	  $(bindir)/`echo $$name | sed '$(transform)'`; \
+	done
+
+execuninstall:
+	for name in $(EXEC); do \
+	 rm -f $(bindir)/`echo $$name | sed '$(transform)'`; \
+	done
+
+maninstall: $(MAN)
+	$(top_srcdir)/mkinstalldirs $(mandir); \
+	for f in $(MAN); do \
+	  $(INSTALL_DATA) $$f $(mandir)/$$f ;\
+	done
+
+manuninstall: $(MAN)
+	for f in $(MAN); do \
+	  rm -f $(mandir)/$$f ;\
+	done
+
+mostlyclean:
+	rm -f *$o _*.c _*.o *._c *._o core core.*
+
+clean: mostlyclean
+	rm -f $(EXEC)
+
+distclean: clean
+	rm -f ansi2knr
+	rm -f Makefile Makefile.tmp.bak
+
+maintainer-clean: distclean
+	@@echo "This command is intended only for maintainers to use;"
+	@@echo "rebuilding the deleted files may require special tools."
+
+dist: $(DISTFILES)
+	for file in $(DISTFILES); do \
+	  ln $(srcdir)/$$file $(distdir) 2> /dev/null \
+	  || cp -p $(srcdir)/$$file $(distdir); \
+	done
+
+Makefile: Makefile.in ../../config.status
+	cd ../.. && CONFIG_FILES=$(subdir)/$@@ CONFIG_HEADERS= ./config.status
+
+# Tell versions [3.59,3.63) of GNU make not to export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:
+
+depend:
+	cp Makefile Makefile.tmp
+	makedepend -f Makefile.tmp -w 0 -- $(COMPILEFLAGS) -- $(SOURCES)
+	grep -v '[.]o: [/]' Makefile.tmp >Makefile
+	rm -f Makefile.tmp
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+
+arithcode.o: ../../sysfuncs.h
+arithcode.o: ../../config.h
+arithcode.o: ../../mg_types.h
+arithcode.o: ../../lib/getopt.h
+arithcode.o: arithcode.h
+extractor.o: ../../sysfuncs.h
+extractor.o: ../../config.h
+extractor.o: ../../mg_types.h
+extractor.o: ../../lib/getopt.h
+extractor.o: extractor.h
+extractor.o: marklist.h
+extractor.o: basictypes.h
+extractor.o: pbmtools.h
+extractor.o: utils.h
+mgbilevel.o: ../../sysfuncs.h
+mgbilevel.o: ../../config.h
+mgbilevel.o: ../../mg_types.h
+mgbilevel.o: ../../lib/getopt.h
+mgbilevel.o: utils.h
+mgbilevel.o: pbmtools.h
+mgbilevel.o: basictypes.h
+mgbilevel.o: marklist.h
+mgbilevel.o: arithcode.h
+mgbilevel.o: bilevel.h
+mgticdump.o: ../../sysfuncs.h
+mgticdump.o: ../../config.h
+mgticdump.o: ../../mg_types.h
+mgticdump.o: ../../lib/getopt.h
+mgticdump.o: marklist.h
+mgticdump.o: basictypes.h
+mgticdump.o: pbmtools.h
+mgticdump.o: utils.h
+mgticdump.o: extractor.h
+utils.o: ../../sysfuncs.h
+utils.o: ../../config.h
+utils.o: ../../mg_types.h
+utils.o: ../../lib/getopt.h
+utils.o: ../../lib/netorder.h
+utils.o: utils.h
+bilevel.o: ../../sysfuncs.h
+bilevel.o: ../../config.h
+bilevel.o: ../../mg_types.h
+bilevel.o: ../../lib/getopt.h
+bilevel.o: bilevel.h
+bilevel.o: marklist.h
+bilevel.o: basictypes.h
+bilevel.o: extractor.h
+bilevel.o: pbmtools.h
+bilevel.o: utils.h
+bilevel.o: arithcode.h
+felics.o: ../../sysfuncs.h
+felics.o: ../../config.h
+felics.o: ../../mg_types.h
+felics.o: ../../lib/getopt.h
+felics.o: ../../lib/bitio_m.h
+felics.o: ../../lib/bitio_m_stdio.h
+mgfelics.o: ../../sysfuncs.h
+mgfelics.o: ../../config.h
+mgfelics.o: ../../mg_types.h
+mgfelics.o: ../../lib/getopt.h
+mgfelics.o: utils.h
+mgticprune.o: ../../sysfuncs.h
+mgticprune.o: ../../config.h
+mgticprune.o: ../../mg_types.h
+mgticprune.o: ../../lib/getopt.h
+mgticprune.o: marklist.h
+mgticprune.o: basictypes.h
+mgticprune.o: pbmtools.h
+mgticprune.o: utils.h
+mgticprune.o: extractor.h
+mgticprune.o: match.h
+mgticstat.o: ../../sysfuncs.h
+mgticstat.o: ../../config.h
+mgticstat.o: ../../mg_types.h
+mgticstat.o: ../../lib/getopt.h
+mgticstat.o: marklist.h
+mgticstat.o: basictypes.h
+mgticstat.o: pbmtools.h
+mgticstat.o: utils.h
+mgticstat.o: extractor.h
+codeoffsets.o: ../../sysfuncs.h
+codeoffsets.o: ../../config.h
+codeoffsets.o: ../../mg_types.h
+codeoffsets.o: ../../lib/getopt.h
+codeoffsets.o: marklist.h
+codeoffsets.o: basictypes.h
+codeoffsets.o: arithcode.h
+codeoffsets.o: utils.h
+marklist.o: ../../sysfuncs.h
+marklist.o: ../../config.h
+marklist.o: ../../mg_types.h
+marklist.o: ../../lib/getopt.h
+marklist.o: marklist.h
+marklist.o: basictypes.h
+marklist.o: pbmtools.h
+marklist.o: utils.h
+mgtic.o: ../../sysfuncs.h
+mgtic.o: ../../config.h
+mgtic.o: ../../mg_types.h
+mgtic.o: ../../lib/getopt.h
+mgtic.o: marklist.h
+mgtic.o: basictypes.h
+mgtic.o: pbmtools.h
+mgtic.o: utils.h
+mgtic.o: extractor.h
+mgtic.o: match.h
+mgtic.o: sortmarks.h
+mgtic.o: codesyms.h
+mgtic.o: arithcode.h
+mgtic.o: codeoffsets.h
+mgtic.o: bilevel.h
+pbmtools.o: ../../sysfuncs.h
+pbmtools.o: ../../config.h
+pbmtools.o: ../../mg_types.h
+pbmtools.o: ../../lib/getopt.h
+pbmtools.o: marklist.h
+pbmtools.o: basictypes.h
+pbmtools.o: pbmtools.h
+pbmtools.o: utils.h
+pbmtools.o: extractor.h
+lstevent.o: ../../sysfuncs.h
+lstevent.o: ../../config.h
+lstevent.o: ../../mg_types.h
+lstevent.o: ../../lib/getopt.h
+lstevent.o: arithcode.h
+lstevent.o: model.h
+codesyms.o: ../../sysfuncs.h
+codesyms.o: ../../config.h
+codesyms.o: ../../mg_types.h
+codesyms.o: ../../lib/getopt.h
+codesyms.o: arithcode.h
+codesyms.o: marklist.h
+codesyms.o: basictypes.h
+codesyms.o: pbmtools.h
+codesyms.o: utils.h
+codesyms.o: codesyms.h
+match.o: ../../sysfuncs.h
+match.o: ../../config.h
+match.o: ../../mg_types.h
+match.o: ../../lib/getopt.h
+match.o: marklist.h
+match.o: basictypes.h
+match.o: pbmtools.h
+match.o: utils.h
+mgticbuild.o: ../../sysfuncs.h
+mgticbuild.o: ../../config.h
+mgticbuild.o: ../../mg_types.h
+mgticbuild.o: ../../lib/getopt.h
+mgticbuild.o: marklist.h
+mgticbuild.o: basictypes.h
+mgticbuild.o: pbmtools.h
+mgticbuild.o: utils.h
+mgticbuild.o: extractor.h
+sortmarks.o: ../../sysfuncs.h
+sortmarks.o: ../../config.h
+sortmarks.o: ../../mg_types.h
+sortmarks.o: ../../lib/getopt.h
+sortmarks.o: marklist.h
+sortmarks.o: basictypes.h
+sortmarks.o: sortmarks.h
+ppm.o: ../../sysfuncs.h
+ppm.o: ../../config.h
+ppm.o: ../../mg_types.h
+ppm.o: ../../lib/getopt.h
+ppm.o: arithcode.h
+ppm.o: model.h
+@
+
+
+1.3
+log
+@More updates for mg-1.3.64x release.
+@
+text
+@d56 1
+a56 1
+LINK = $(CC) $(LDFLAGS) -o $@@
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@d44 1
+a44 1
+LIBS = $(LIBMG) @@LIBS@@
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d26 1
+a26 1
+ 
+d35 1
+a35 1
+ 
+d37 1
+a37 1
+CFLAGS = @@CFLAGS@@ 
+d47 1
+a47 1
+ 
+d53 3
+a55 2
+ 
+COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+a61 1
+ 
+d65 1
+a65 1
+ 
+a77 2
+ 
+INCLUDES = -I../.. -I../../lib -I.
+d79 1
+d85 1
+a85 1
+  codesyms.c      match.c         mgticbuild.c    sortmarks.c     ppm.c  
+a86 2
+
+ 
+d92 1
+a92 1
+MISC          = Makefile.in 
+d96 1
+a96 1
+DISTFILES     = $(ALLFILES) 
+a105 1
+
+d108 1
+d122 1
+a122 1
+            
+d133 1
+a133 1
+	$(LINK) $(TIC_OBJS) $(LIBS) 
+d139 1
+a139 1
+ 
+d146 1
+a146 1
+ 
+d150 2
+a151 2
+	$(LINK) $(TICSTAT_OBJS) $(LIBS) 
+ 
+d155 2
+a156 2
+	$(LINK) $(TICDUMP) $(LIBS) 
+ 
+a187 1
+
+d190 1
+a190 1
+ 
+d193 1
+a193 1
+ 
+d197 1
+a197 1
+ 
+d201 1
+a201 1
+ 
+d207 1
+a207 1
+ 
+d210 1
+a210 1
+ 
+d217 1
+a217 1
+	makedepend -f Makefile.tmp -w 0 -- $(CFLAGS) -- $(SOURCES)
+d222 167
+@

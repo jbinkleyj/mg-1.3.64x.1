@@ -1,0 +1,80 @@
+head	1.2;
+access;
+symbols;
+locks
+	beebe:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2004.10.31.00.20.46;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.31.00.20.33;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@#! /bin/sh
+# Convert types long and u_long in the mg-1.3x source tree
+# to MG_long_t and MG_u_long_t.
+# [30-Oct-2004] -- update with change to distinctive type names.
+# [26-May-1997]
+for f in `find . -name '*.[chyl]' -print | sort`
+do
+	mv $f $f.old
+	sed	\
+		-e 's/u_long/MG_u_long_t/g' \
+		-e 's/[(]long[)]/ (MG_long_t) /g' \
+		-e 's/[(]long[ 	][ 	]*/ (MG_long_t /g' \
+		-e 's/[(]unsigned[ 	][ 	]*long[)]/ (unsigned MG_long_t) /g' \
+		-e 's/[(]unsigned[ 	][ 	]*long[ 	][ 	]*int[)]/ (unsigned MG_long_t) /g' \
+		-e 's/^long[ 	]int[ 	][ 	]*/MG_long_t /g' \
+		-e 's/^long/MG_long_t/g' \
+		-e 's/^\\^MG_long_t/MG_long_t/g' \
+		-e 's/[ 	]long[ 	]int[ 	]/ MG_long_t /g' \
+		-e 's/[ 	]long[ 	]/ MG_long_t /g' \
+		-e 's/[ 	]long:/ MG_long_t : /g' \
+		-e 's/[ 	]long$/ MG_long_t/g' \
+		<$f.old >$f
+	rm -f $f.old
+	echo $f
+done
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d3 2
+a4 1
+# to mg_long and mg_u_long.
+d10 12
+a21 12
+		-e 's/u_long/mg_u_long/g' \
+		-e 's/[(]long[)]/ (mg_long) /g' \
+		-e 's/[(]long[ 	][ 	]*/ (mg_long /g' \
+		-e 's/[(]unsigned[ 	][ 	]*long[)]/ (unsigned mg_long) /g' \
+		-e 's/[(]unsigned[ 	][ 	]*long[ 	][ 	]*int[)]/ (unsigned mg_long) /g' \
+		-e 's/^long[ 	]int[ 	][ 	]*/mg_long /g' \
+		-e 's/^long/mg_long/g' \
+		-e 's/^\\^mg_long/mg_long/g' \
+		-e 's/[ 	]long[ 	]int[ 	]/ mg_long /g' \
+		-e 's/[ 	]long[ 	]/ mg_long /g' \
+		-e 's/[ 	]long:/ mg_long : /g' \
+		-e 's/[ 	]long$/ mg_long/g' \
+@

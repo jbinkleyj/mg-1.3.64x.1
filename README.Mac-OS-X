@@ -1,0 +1,104 @@
+Fri Oct 29 16:35:16 2004
+
+A normal build of mg-1.3.1x with
+
+	./configure && make all check
+
+produced executables that failed the validation tests:
+
+	./test/testmg `pwd`
+	Building test database...
+	Could not open ./mgdata/alice/alice.invf
+	Could not open ./mgdata/alice/alice.invf.chunk
+	Could not open ./mgdata/alice/alice.invf.chunk.trans
+	...
+	Could not open ./mgdata/alice/alice.text.dict
+	FAIL: Build Sum comparison did not match
+	Please inspect sum.diff to see which files are different
+	FAIL: Build Length comparison did not match
+	Please inspect len.diff to see which files are different
+	Running queries...
+	FAIL: query 1 did not match
+	FAIL: query 2 did not match
+	FAIL: query 3 did not match
+	Number of failures = 5
+
+The default compiler found for that build was the very recent
+gcc-3.4.2 from 6-Sep-2004.  A "make check" after recompilation with
+-O2 produced the same failure.
+
+I then forced the installation anyway and tried bibsearch: it dies
+like this:
+
+	% bibsearch
+	========================================================================
+	Welcome to the BibTeX bibliography database search facility
+	Version 2.00 13-Feb-2001
+	...
+	  under certain conditions; type `.conditions' for details.
+
+	mgquery : No error
+
+
+It does not even reach the point of the first input prompt.
+
+I then tried a fresh build with Apple-distributed version of gcc:
+
+	% /usr/bin/cc  --version
+	cc (GCC) 3.3 20030304 (Apple Computer, Inc. build 1495)
+	Copyright (C) 2002 Free Software Foundation, Inc.
+	This is free software; see the source for copying conditions.  There is NO
+	warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+	% ls -l /usr/bin/cc
+	lrwxr-xr-x  1 root wheel 7 Jan 16  2004 /usr/bin/cc -> gcc-3.3
+
+	% ls -l /usr/bin/gcc-*
+	-r-xr-xr-x  1 root wheel 131720 Jul 29 09:51 /usr/bin/gcc-3.3
+
+That build was done like this:
+
+	% env CC=cc CXX=c++ ./configure --prefix=/tmp/local && make all check
+
+That too failed the validation tests, and produced the "mgquery : No
+error" failure in bibsearch.
+
+With further experimentation, I found that manually deleting gmalloc$o
+from the OBJECTS list in the generated lib/Makefile, removing any *.a
+files there, and then rerunning make at top level produced a working
+mg that passes its simple validation tests, and works with bibsearch
+as well:
+
+	% make check
+	...
+	cc  -o simple_sum simple_sum.c
+	make[1]: Leaving directory `/local/build/cc/mg-1.3.1x/test'
+	./test/testmg `pwd`
+	Building test database...
+	PASS: Build Sum comparison matched ok
+	PASS: Build Length comparison matched ok
+	Running queries...
+	PASS: query 1 matched ok
+	PASS: query 2 matched ok
+	PASS: query 3 matched ok
+
+	% make install prefix=/tmp/local
+
+	% /tmp/local/bin/bibsearch
+	========================================================================
+	Welcome to the BibTeX bibliography database search facility
+	Version 2.00 13-Feb-2001
+	...
+	Enter a command or query (.quit to terminate, .help for assistance).
+	>
+
+I therefore prepared a new release of mg, mg-1.3.2x, which adds
+Makefile dependencies on libmg.a in the src/{text,images}, and removes
+gmalloc$o from the OBJECTS list in lib/Makefile.in.
+
+That version passes the validation tests when built with any of these
+recipes:
+
+	env CC=cc ./configure && make all check		# gcc 3.3 20030304 (Apple Computer, Inc. build 1495)
+	env CC=gcc ./configure && make all check	# gcc (GCC) 3.4.2
+	env CC=gcc3 ./configure && make all check	# gcc 3.1 20021003 (prerelease)

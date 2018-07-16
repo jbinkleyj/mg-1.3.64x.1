@@ -1,0 +1,92 @@
+head	1.2;
+access;
+symbols;
+locks
+	beebe:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2004.10.31.00.09.58;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.31.00.08.07;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@CC = @@CC@@
+CFLAGS = @@CFLAGS@@ 
+CPPFLAGS = @@CPPFLAGS@@
+INCLUDES = -I..
+RM	= rm -f
+
+DISTFILES = Makefile q1 q2 q3 r1 r2 r3 mgrc1 mgrc2 mgrc3 testmg \
+            alice.sum simple_sum.c alice.len
+
+COMPILEFLAGS = $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
+COMPILE = $(CC) -c $(COMPILEFLAGS)
+
+.SUFFIXES:
+.SUFFIXES: .c .o
+.c.o:
+	$(COMPILE) $<
+
+all: simple_sum
+
+check:
+
+dist:
+	ln $(DISTFILES) $(distdir)
+
+simple_sum: simple_sum.c
+	$(CC) $(COMPILEFLAGS) -o $@@ $?
+
+clean:
+	-$(RM) core a.out *~ \#*
+	-$(RM) simple_sum *.cmp *.log *.diff
+	-$(RM) -r mgdata
+
+mostlyclean:	clean
+
+distclean:	mostlyclean
+
+maintainer-clean:	distclean
+
+depend:
+	cp Makefile Makefile.tmp
+	makedepend -f Makefile.tmp -w 0 -- $(COMPILEFLAGS) -- $(SOURCES)
+	grep -v '[.]o: [/]' Makefile.tmp >Makefile
+	rm -f Makefile.tmp
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d2 3
+a4 1
+CFLAGS = @@CFLAGS@@
+d10 8
+d20 2
+d26 1
+a26 1
+	$(CC) $(CFLAGS) -o $@@ $?
+d38 8
+@

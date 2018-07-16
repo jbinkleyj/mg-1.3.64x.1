@@ -1,0 +1,259 @@
+2006-01-14 11:49:55-0700  Nelson H. F. Beebe  <beebe@math.utah.edu>
+
+	* Release mg-1.3.64x.1.
+
+	This is a minor update to the previous release to remove a
+	corruption problem in output files on Sun Solaris 10.  I am now
+	running a 64-bit version of mg on Solaris 10, built like this:
+
+		CC=/opt/SUNWspro/bin/cc \
+		CFLAGS="-xtarget=ultra 	-xarch=v9 -I/usr/local/include" \
+		CXX=/opt/SUNWspro/bin/CC \
+		CXXFLAGS="-xtarget=ultra -xarch=v9 -I/usr/local/include" \
+		LDFLAGS="-R/usr/local/lib/64 -L/usr/local/lib/64" \
+		./configure && make all check
+
+	* lib/getopt.c: Force use of <string.h> on all platforms.
+
+	* sysfuncs.h: Undefine textdomain before redefining it.
+
+	* ./src/images/Makefile.in and ./src/text/Makefile.in:
+	  Add $(COMPILEFLAGS) to LINK command, so that builds in 64-bit
+	  environments on mixed 32/64-bit systems do not lose needed
+	  compilation flags.
+
+
+2004-11-01 07:52:28-0700  Nelson H. F. Beebe  <beebe@math.utah.edu>
+
+ _ __ ___   __ _   _ __   _____      __ __      _____  _ __| | _____  (_)_ __
+| '_ ` _ \ / _` | | '_ \ / _ \ \ /\ / / \ \ /\ / / _ \| '__| |/ / __| | | '_ \
+| | | | | | (_| | | | | | (_) \ V  V /   \ V  V / (_) | |  |   <\__ \ | | | | |
+|_| |_| |_|\__, | |_| |_|\___/ \_/\_/     \_/\_/ \___/|_|  |_|\_\___/ |_|_| |_|
+           |___/
+                          __   _  _         _     _ _
+                         / /_ | || |       | |__ (_) |_
+                        | '_ \| || |_ _____| '_ \| | __|
+                        | (_) |__   _|_____| |_) | | |_
+                         \___/   |_|       |_.__/|_|\__|
+
+                        _                                      _       _
+         ___ _ ____   _(_)_ __ ___  _ __  _ __ ___   ___ _ __ | |_ ___| |
+        / _ \ '_ \ \ / / | '__/ _ \| '_ \| '_ ` _ \ / _ \ '_ \| __/ __| |
+       |  __/ | | \ V /| | | | (_) | | | | | | | | |  __/ | | | |_\__ \_|
+        \___|_| |_|\_/ |_|_|  \___/|_| |_|_| |_| |_|\___|_| |_|\__|___(_)
+
+
+	* Release mg-1.3.64x.
+
+	  This is a MAJOR source change in almost all *.[ch] files to
+	  replace the unsigned long and long data types with new types
+	  MG_u_long_t and MG_long_t that are defined to be 32-bit
+	  types in 64-bit environments, ensuring compatibility with mg
+	  databases built on 32-bit systems.
+
+	* mg_types.h: New file.
+
+	* config.guess and config.sub: Replace with latest versions from
+	  the GNU developers.  They are fetched like this:
+
+		wget http://savannah.gnu.org/cgi-bin/viewcvs/config/config/config.guess?rev=HEAD&content-type=text/plain
+		wget http://savannah.gnu.org/cgi-bin/viewcvs/config/config/config.sub?rev=HEAD&content-type=text/plain
+
+	* Makefile.in, lib/Makefile.in, src/images/Makefile.in,
+	  src/scripts/Makefile.in, src/text/Makefile.in,
+	  test/Makefile.in: Major update with complete and correct
+	  dependency lists, and revised settings for CFLAGS, INCLUDES,
+	  and COMPILEFLAGS.
+
+	* This version passes the validation suite tests on these
+	  64-bit systems:
+
+		AMD Opteron		GNU/Linux 2.4.19-NUMA (SuSE LES-8 (AMD64) 8.1)
+		Compaq Alpha Sierra	OSF/1 5.1
+		Compaq/DEC Alpha	OSF/1 4.0F
+		Intel Itanium-2		GNU/Linux Red Hat Linux Advanced Server release 2.1AS (Derry)
+		SGI Origin 200		IRIX 6.5
+		Sun SPARC		Solaris 2.7
+		Sun SPARC		Solaris 2.8
+		Sun SPARC		Solaris 2.9
+
+	  It also passes on these 32-bit systems:
+
+		Apple PowerPC G3 267MHz	GNU/Linux 2.4.19-4a (Yellow Dog Linux release 2.3 (Dayton))
+		Apple PowerPC G4 1.4GHz	Darwin 7.3.0 (MacOS 10.3.2 (7D26))
+		IBM PowerPC		AIX 4.2
+		Intel Pentium II	FreeBSD 4.4-RELEASE #0
+		Intel Pentium III	FreeBSD 5.0
+		Intel Pentium III	GNU/Linux 2.4.18-26.8.0smp (Red Hat 8.0 (Psyche))
+		Intel Pentium III	GNU/Linux 2.4.21-20.ELsmp (Red Hat Enterprise Linux WS release 3 (Taroon Update 3))
+		Intel Pentium III	NetBSD 1.6
+		Intel Pentium III	OpenBSD 3.2
+		Intel Pentium III	Solaris 9 x86
+		SGI Indy-200		GNU/Linux Gentoo 1.4.16
+		SGI Origin 200		IRIX 6.5
+		Sun SPARC		GNU/Linux 2.2.19-6.2.1 (Red Hat 6.2)
+		Sun SPARC		Solaris 2.7
+		Sun SPARC		Solaris 2.8
+		Sun SPARC		Solaris 2.9
+
+------------------------------------------------------------------------
+
+2004-10-30 15:01:38-0600  Nelson H. F. Beebe  <beebe@math.utah.edu>
+
+	* Relase mg-1.3.2x
+
+	  This is a maintenance release with minor updates to handle
+	  some issues on Apple MacOS 10, and document the status of
+	  (lack of) support on 64-bit systems in a form that is
+	  compatible with 32-bit systems.
+
+	* ./lib/Makefile.in: Remove gmalloc$o from OBJECTS lists to
+	  eliminate build failure on Apple MacOS 10.
+
+	* ./src/images/Makefile.in and ./src/text/Makefile.in: Add
+	  dependencies on LIBMG.
+
+	* ./configure.in: Reset version to 1.3.2x
+
+	* README.Mac-OS-X: new file
+
+	* README.64-bit: new file
+
+------------------------------------------------------------------------
+
+2003-01-14 09:32:22-0700  Nelson H. F. Beebe  <beebe@math.utah.edu>
+
+	* Release mg-1.3.1x.
+
+	  This is a maintenance release with numerous updates to the
+	  mg-1.3x distribution to bring the mg code into conformance
+	  with C99 (International ISO/IEC Standard 9899:1999(E)
+	  Programming languages -- C).  The new code has been tested
+	  with gcc-3.2.1 (gcc -std=c99 -D_XOPEN_SOURCE) and Intel icc -c99
+	  on Intel IA-32 (GNU/Linux Red Hat 7.2), and cc -std=c99 on Sun
+	  Solaris 2.9.
+
+	  **************************************************************
+	  **************************************************************
+	  ** Unlike earlier patch collections for mg-1.3x, this	      **
+	  ** release is complete: no application of patch to an       **
+      	  ** mg-1.2 distribution is required.                         **
+	  **************************************************************
+	  **************************************************************
+
+	* Makefile.in: Move -L option from MDEFINES to LIBS.  Add RM
+	  macro and replace instances of rm with -$(RM).  Replace
+	  /usr/local by $(prefix).  Change -I option to match code
+	  change in src/text/readline.c to make readline header file use
+	  conform to practice in other programs.  Add clean-test target.
+
+	* aclocal.m4: Replace LIBOBJS settings with AC_LIBOBJ() calls
+	  for conformance to autoconf-2.52 and later.
+
+	* config.h.in: Regenerate with autoheader-2.57.
+
+	* configure: Regenerate with autoconf-2.57.
+
+	* configure.in: Replace LIBOBJS settings with AC_LIBOBJ() calls
+	  for conformance to autoconf-2.52 and later.  Add additional
+	  tests for header files that were referenced with HAVE_XXX_H
+	  symbols in the source code, but not checked for at configure
+	  time.  Add additional tests for functions that were referenced
+	  with HAVE_XXX symbols, but not configured for.  Add check for
+	  declarations of fileno() and popen(), since these are often
+	  hidden in c89 environments.
+
+	* lib/error.c: Change type of sys_errlist, and add typecast on
+	  its use as a function return value.  Now that HAVE_STRERROR is
+	  properly tested for, this old code will rarely be needed.
+
+	* lib/perf_hash.c: Include <time.h> and add prototype for
+	  irandm().
+
+	* src/images/arithcode.c: Initialize arith_in and arith_out at
+	  run time, since compile-time assignments with stdin and stdout
+	  fail on several current systems.
+
+	* src/images/mgbilevel.c: Change main() from void to int.
+
+	* src/images/mgtic.c: Change main() from void to int.
+
+	* src/images/mgticbuild.c: Change main() from void to int.
+
+	* src/images/mgticdump.c: Change main() from void to int.
+
+	* src/images/mgticprune.c: Change main() from void to int.
+
+	* src/images/mgticstat.c: Change main() from void to int.
+
+	* src/text/bool_parser.y: Add required (u_char*) and (char*)
+	  typecasts in four places to remove errors from mixing unsigned
+	  and signed char* pointers.  Declare yyparse().
+
+	* src/text/bool_tester.c: Initialize file_in and file_out at run
+	  time, instead of at compile time.
+
+	* src/text/ivf.pass2.c: Add explicit type in header declaration.
+
+	* src/text/mg_compression_dict.c: Change main() from void to
+	  int.
+
+	* src/text/mg_fast_comp_dict.c: Change main() from void to int.
+
+	* src/text/mg_hilite_words.c: Change main() from void to int.
+
+	* src/text/mg_invf_dict.c: Change main() from void to int.
+
+	* src/text/mg_invf_dump.c: Change main() from void to int.
+
+	* src/text/mg_invf_rebuild.c: Change main() from void to int.
+
+	* src/text/mg_passes.c: Change main() from void to int.
+
+	* src/text/mg_perf_hash_build.c: Change main() from void to int.
+
+	* src/text/mg_stem_idx.c: Change main() from void to int.
+
+	* src/text/mg_text_estimate.c: Change main() from void to int.
+
+	* src/text/mg_text_merge.c: Change main() from void to int.
+
+	* src/text/mg_weights_build.c: Change main() from void to int.
+
+	* src/text/mgdictlist.c: Change main() from void to int.
+
+	* src/text/mgquery.c: Change main() from void to int.  Add
+	  explicit type in declaration of last_pos.
+
+	* src/text/mgstat.c: Change main() from void to int.
+
+	* src/text/read_line.c: Update header file inclusions from
+	  "readline.h" to <readline/readline.h> etc.  This avoids
+	  conflicts on systems which have older versions of those files
+	  in /usr/include/readline, with newer ones in
+	  $(prefix)/include/readline.  Reenable inclusion of history.h.
+
+	* src/text/words.h: Add needed (u_char*) typecasts in two
+	  places.
+
+	* sysfuncs.h: Undef HAVE_STRINGS_H if HAVE_STRING_H is included.
+	  C89-conformant systems require only <string.h>, and mg's macro
+	  definitions of bcmp(), bcopy(), and bzero() produce syntax
+	  errors in <strings.h> on at least Sun Solaris.
+
+	* test/Makefile: Add RM macro, and clean, mostlyclean,
+	  distclean, and maintainer-clean targets.
+
+	* test/alice.len: New version from Sun Solaris 2.9 tests.  [I
+	  apparently forgot to update the test/* input files against
+	  which new output is declared, when I prepared mg-1.3x.]
+
+	* test/alice.sum: New version from Sun Solaris 2.9 tests.
+
+	* test/r1: New version from Sun Solaris 2.9 tests.
+
+	* test/r2: New version from Sun Solaris 2.9 tests.
+
+	* test/r3: New version from Sun Solaris 2.9 tests.
+
+	* test/simple_sum.c: Change main() from void to int.

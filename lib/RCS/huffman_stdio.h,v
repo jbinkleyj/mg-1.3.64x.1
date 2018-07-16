@@ -1,0 +1,86 @@
+head	1.2;
+access;
+symbols;
+locks
+	beebe:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2004.10.31.00.11.04;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.30.21.11.14;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@/**************************************************************************
+ *
+ * huffman_stdio.h -- Huffman coding function to a file
+ * Copyright (C) 1994  Neil Sharman
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * $Id: huffman_stdio.h,v 1.1 2004/10/30 21:11:14 beebe Exp beebe $
+ *
+ **************************************************************************/
+
+#ifndef H_HUFFMAN_STDIO
+#define H_HUFFMAN_STDIO
+
+
+
+void BIO_Stdio_Huff_Encode (MG_u_long_t val, MG_u_long_t *codes,
+			    char *clens, stdio_bitio_state * bs);
+
+
+MG_u_long_t BIO_Stdio_Huff_Decode (MG_u_long_t *mincodes,
+				     MG_u_long_t **values,
+				     stdio_bitio_state * bs);
+
+
+#endif
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d20 1
+a20 1
+ * $Id: huffman_stdio.h,v 1.2 1994/09/20 04:20:05 tes Exp $
+d29 1
+a29 1
+void BIO_Stdio_Huff_Encode (unsigned long val, unsigned long *codes,
+d33 2
+a34 2
+unsigned long BIO_Stdio_Huff_Decode (unsigned long *mincodes,
+				     unsigned long **values,
+@

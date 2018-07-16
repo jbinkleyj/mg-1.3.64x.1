@@ -1,0 +1,122 @@
+head	1.2;
+access;
+symbols;
+locks
+	beebe:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2004.10.31.00.11.04;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.30.21.11.14;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@/**************************************************************************
+ *
+ * bitio_gen.h -- General supoport routines for bitio
+ * Copyright (C) 1994  Neil Sharman and Alistair Moffat
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * $Id: bitio_gen.h,v 1.1 2004/10/30 21:11:14 beebe Exp beebe $
+ *
+ **************************************************************************
+ *
+ *  This file contains function definitions for doing general bitio operations.
+ *
+ *  This file defines functions for calculation the length in bits of a number
+ *  coded unary, binary, delta, gamma, elias, and  bblock coding. It defines 
+ *  routines for calculating the parameter and bounds for bblock coding. 
+ *  Routines for calculating ceil and floor lg are also defined.
+ *
+ *
+ **************************************************************************/
+
+#ifndef H_BITIO_GEN
+#define H_BITIO_GEN
+
+MG_u_long_t BIO_Unary_Length (MG_u_long_t val);
+
+MG_u_long_t BIO_Binary_Length (MG_u_long_t val, MG_u_long_t b);
+
+MG_u_long_t BIO_Gamma_Length (MG_u_long_t val);
+
+MG_u_long_t BIO_Delta_Length (MG_u_long_t val);
+
+MG_u_long_t BIO_Elias_Length (MG_u_long_t val, MG_u_long_t b, double s);
+
+MG_u_long_t BIO_Bblock_Length (MG_u_long_t val, MG_u_long_t b);
+
+int BIO_Bblock_Init (int N, int p);
+
+int BIO_Bblock_Init_W (int N, int p);
+
+int BIO_Bblock_Bound_b (int N, int p, int b);
+
+int BIO_Bblock_Bound (int N, int p);
+
+int BIO_Gamma_Bound (int N, int p);
+
+int floorlog_2 (int b);
+
+int ceillog_2 (int b);
+
+#endif
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d20 1
+a20 1
+ * $Id: bitio_gen.h,v 1.2 1994/09/20 04:19:51 tes Exp $
+d37 1
+a37 1
+unsigned long BIO_Unary_Length (unsigned long val);
+d39 1
+a39 1
+unsigned long BIO_Binary_Length (unsigned long val, unsigned long b);
+d41 1
+a41 1
+unsigned long BIO_Gamma_Length (unsigned long val);
+d43 1
+a43 1
+unsigned long BIO_Delta_Length (unsigned long val);
+d45 1
+a45 1
+unsigned long BIO_Elias_Length (unsigned long val, unsigned long b, double s);
+d47 1
+a47 1
+unsigned long BIO_Bblock_Length (unsigned long val, unsigned long b);
+@

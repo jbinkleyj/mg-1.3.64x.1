@@ -1,0 +1,34 @@
+%% /home/src/mg/mg-1.3.2x/README.64-bit, Sat Oct 30 14:07:14 2004
+%% Edit by Nelson H. F. Beebe <beebe@math.utah.edu>
+
+The section ``WHY MG DOES NOT WORK ON DEC ALPHA SYSTEMS'' in the
+companion file, README.mg-1.3x, written in May 1997 describes the
+reasons why mg on an (originally DEC, then Compaq, now
+Hewlett-Packard) Alpha OSF/1 or GNU/Linux system did not interoperate
+with databases built on 32-bit systems prior to release mg-1.3.64x.
+
+In 2004, there are also other 64-bit architectures:
+
+	* SGI IRIX on MIPS allows 64-bit builds with cc -64.
+
+	* Sun Solaris on SPARC allows 64-bit builds with cc
+          -xtarget=ultra -xarch=v9.
+
+	* GNU/Linux on AMD Opteron (AMD64 architecture) is 64-bit by
+          default, although gcc and pathcc provide the -m32 option for
+          32-bit mode, pgcc provides -tp k8-32.  Unfortunately, pathcc
+          generates bad assembly code with -m32, preventing a
+          successful build.  With the other two compilers, I could not
+          get a successful link against 32-bit version of -lreadline
+          and -ltermcap.
+          However, binaries built on GNU/Linux IA-32 (formerly, x86)
+          systems work, and we use mg successfully that way.
+
+	* GNU/Linux on Intel Itanium-2 (IA-64 architecture) is 64-bit
+          by default, and no 32-bit mode is provided by compilers.
+          However, binaries built on GNU/Linux IA-32 (formerly, x86)
+          systems work, and we use mg successfully that way.
+
+	* GNU/Linux on Intel EM64T (shipping Fall 2004) is 64-bit by
+          default, and should work compatibly with AMD Opteron,
+          although no tests have yet been possible on such a system.

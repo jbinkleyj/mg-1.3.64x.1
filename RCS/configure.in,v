@@ -1,0 +1,172 @@
+head	1.3;
+access;
+symbols;
+locks
+	beebe:1.3; strict;
+comment	@# @;
+
+
+1.3
+date	2004.11.01.14.44.47;	author beebe;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2004.10.31.00.18.11;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.31.00.17.52;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.3
+log
+@More updates for mg-1.3.64x release.
+@
+text
+@dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/text/mgquery.c)
+AC_CONFIG_HEADER(config.h)
+AC_ARG_PROGRAM
+
+dnl
+PACKAGE=mg
+VERSION=1.3.64x
+
+AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION")
+AC_SUBST(PACKAGE)
+AC_SUBST(VERSION)
+
+dnl Checks for programs.
+dnl AC_PROG_CXX
+AC_PROG_AWK
+AC_PROG_YACC
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_AIX
+AC_ISC_POSIX
+AC_MINIX
+fp_C_PROTOTYPES
+AC_C_BIGENDIAN
+AC_C_CONST
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+dnl --- This should be in the stdc checking -----------------
+if test "$ac_cv_prog_cc_stdc" = '-Xc'; then
+dnl The Pyramids running SMP_DC.OSx on MIPS r3000 chips with
+dnl /usr/opt/cc3.11/bin/cc treat -Xc as full ANSI mode - no POSIX or
+dnl XOPEN extensions (like popen).
+dnl Unfortunately -D_{XOPEN,POSIX}_SOURCE can't provide all that mg
+dnl needs. So drop back to -Xa
+AC_TRY_COMPILE(
+[#include <stdio.h>
+], [ FILE *rubbish = popen("yes", "r"); ],,
+[CC="`echo $CC | sed 's/-Xc/-Xa/'`"    ac_cv_prog_cc_stdc='-Xa'])
+fi
+dnl ----------------------
+
+
+dnl Checks for libraries.
+dnl Replace `main' with a function in -lm:
+AC_CHECK_LIB(m, cosh)
+AC_CHECK_LIB(termcap, tgoto)
+AC_CHECK_LIB(readline, rl_getc, [], [], [-ltermcap])
+
+dnl Checks for header files.
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h libintl.h limits.h locale.h memory.h pathmax.h \
+		 readline/chardefs.h readline/history.h readline/readline.h \
+		 string.h sys/param.h sys/procfs.h sys/time.h unistd.h)
+AC_EGREP_HEADER(fread, stdio.h, AC_DEFINE(HAVE_FREAD_DECL))
+AC_EGREP_HEADER(fgetc, stdio.h, AC_DEFINE(HAVE_FGETC_DECL))
+AC_EGREP_HEADER(pr_brksize, sys/procfs.h, AC_DEFINE(HAVE_PR_BRKSIZE))
+
+dnl Checks for library functions.
+AC_FUNC_ALLOCA
+AC_PROG_GCC_TRADITIONAL
+AC_TYPE_SIGNAL
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(chsize ftime getpagesize getrusage isascii mallinfo \
+	       select setbuffer setlocale sigcontext strerror strftime \
+	       strtol times)
+AC_REPLACE_FUNCS(ftruncate strstr strcasecmp)
+
+AC_CHECK_DECLS([fileno, popen])
+
+# *** Custom checking (based on GNU tar configure.in) ***
+# ---------------------------------------------------------------------------
+AC_MSG_CHECKING(for HP-UX needing gmalloc)
+if test "`(uname -s) 2> /dev/null`" = 'HP-UX'; then
+  AC_MSG_RESULT(yes)
+  AC_LIBOBJ([gmalloc])
+  AC_DEFINE(HAVE_VALLOC)
+else
+  AC_MSG_RESULT(no)
+  AC_CHECK_FUNCS(valloc)
+fi
+
+fp_WITH_DMALLOC
+fp_WITH_REGEX
+
+# ---------------------------------------------------------------------------
+if test "$ac_cv_func_alloca" = 'no'; then
+dnl    support functions for alloca.c
+  AC_LIBOBJ([error])
+  AC_LIBOBJ([xmalloc])
+fi
+
+
+# ---------------------------------------------------------------------------
+
+AC_OUTPUT([Makefile src/text/Makefile src/images/Makefile
+          src/scripts/Makefile lib/Makefile test/Makefile],
+[test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h])
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@d54 3
+a56 1
+AC_CHECK_LIB(m, main)
+d62 1
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d8 1
+a8 1
+VERSION=1.3.2x
+d16 1
+a16 1
+AC_PROG_CXX
+d59 2
+a60 2
+AC_CHECK_HEADERS(fcntl.h libintl.h limits.h locale.h memory.h string.h \
+		 sys/param.h sys/procfs.h sys/time.h unistd.h)
+@

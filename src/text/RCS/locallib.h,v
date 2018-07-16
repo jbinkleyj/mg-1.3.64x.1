@@ -1,0 +1,112 @@
+head	1.2;
+access;
+symbols;
+locks
+	beebe:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	2004.10.31.00.13.35;	author beebe;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2004.10.30.21.11.34;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.2
+log
+@Major update for version 1.3.64x to support 64-bit architectures.
+@
+text
+@/**************************************************************************
+ *
+ * locallib.h -- Misc functions
+ * Copyright (C) 1994  Gary Eddy, Alistair Moffat and Neil Sharman
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * $Id: locallib.h,v 1.1 2004/10/30 21:11:34 beebe Exp beebe $
+ *
+ **************************************************************************/
+
+#ifndef LOCALLIB_H
+#define LOCALLIB_H
+
+#include "sysfuncs.h"
+
+#include "text.h"
+
+#define NUMOF(a) (sizeof(a)/sizeof((a)[0]))
+
+int vecentropy (int *A, int n);
+
+int huffcodebits (MG_u_long_t *A, int n);
+
+int modelbits (MG_u_long_t *A, int n);
+
+int prime (int p);
+
+
+int Read_cdh (FILE * f, compression_dict_header * cdh, MG_u_long_t * mem, MG_u_long_t * disk);
+
+int Read_cfh (FILE * f, comp_frags_header * cfh, MG_u_long_t * mem, MG_u_long_t * disk);
+
+int F_Read_cdh (File * f, compression_dict_header * cdh, MG_u_long_t * mem,
+		MG_u_long_t * disk);
+
+int F_Read_cfh (File * f, comp_frags_header * cfh, MG_u_long_t * mem, MG_u_long_t * disk);
+
+
+#endif
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d20 1
+a20 1
+ * $Id: locallib.h,v 1.3 1994/10/20 03:56:51 tes Exp $
+d35 1
+a35 1
+int huffcodebits (unsigned long *A, int n);
+d37 1
+a37 1
+int modelbits (unsigned long *A, int n);
+d42 1
+a42 1
+int Read_cdh (FILE * f, compression_dict_header * cdh, u_long * mem, u_long * disk);
+d44 1
+a44 1
+int Read_cfh (FILE * f, comp_frags_header * cfh, u_long * mem, u_long * disk);
+d46 2
+a47 2
+int F_Read_cdh (File * f, compression_dict_header * cdh, u_long * mem,
+		u_long * disk);
+d49 1
+a49 1
+int F_Read_cfh (File * f, comp_frags_header * cfh, u_long * mem, u_long * disk);
+@

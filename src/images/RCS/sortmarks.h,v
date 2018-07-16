@@ -1,0 +1,55 @@
+head	1.1;
+access;
+symbols;
+locks
+	beebe:1.1; strict;
+comment	@ * @;
+
+
+1.1
+date	2004.10.30.21.11.58;	author beebe;	state Exp;
+branches;
+next	;
+
+
+desc
+@Original version.
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@/**************************************************************************
+ *
+ * sortmarks.h -- Functions which sort the marks into a "readable sequence"
+ * Copyright (C) 1994  Stuart Inglis
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * $Id: sortmarks.h,v 1.2 1994/09/20 04:42:07 tes Exp $
+ *
+ **************************************************************************/
+
+
+#ifndef _SortMarks_h_
+#define _SortMarks_h_
+
+marklistptr sortmarks (marklistptr listofmarks);
+
+#endif
+@

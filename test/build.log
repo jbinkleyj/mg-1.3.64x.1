@@ -1,0 +1,144 @@
+-----------------------------------
+debian-xw9400, Mon Jul 16 15:09:42 EDT 2018
+alice --> alice/alice
+-----------------------------------
+/home/jobin/Downloads/mg-1.3.64x.1/src/text/mg_get alice -init
+Can not find a .mg_getrc, so creating a default one: /home/jobin/.mg_getrc
+-----------------------------------
+/home/jobin/Downloads/mg-1.3.64x.1/src/text/mg_get alice -text | mg_passes -f alice/alice -2 -m 32 -s 3 -G -t 10 -T1 -I1
+ivf.pass1 : Mem reqd for 1 chunk:    19292 bytes
+ivf.pass1 : Chunks written      : 1
+ivf.pass1 : Peak memory usage   :        1.4 Mb
+ivf.pass1 : Stems size          :       24.8 kB  16.72%
+ivf.pass1 : Lev 1 inverted file :       16.5 kB  11.16%
+ivf.pass1 : Lev 2 inverted file :       20.4 kB  13.75%
+ivf.pass1 : Lev 3 inverted file :       41.6 kB  28.11%
+ivf.pass1 : Record addresses    :        0.0 kB   0.00%
+mg_passes : 
+mg_passes :                 :    init         process        done
+mg_passes : text.pass1      : 00:00:00.00   00:00:00.00   00:00:00.00
+mg_passes : ivf.pass1       : 00:00:00.00   00:00:00.01   00:00:00.00
+mg_passes : 
+mg_passes : Init time       : 00:00:00.00 cpu, 00:00:00 elapsed.
+mg_passes : Process time    : 00:00:00.01 cpu, 00:00:00 elapsed.
+mg_passes : Done time       : 00:00:00.00 cpu, 00:00:00 elapsed.
+mg_passes : Total time      : 00:00:00.01 cpu, 00:00:00 elapsed.
+mg_passes : Documents       : 835
+mg_passes : Bytes received  : 152435
+mg_passes : Bytes processed : 151600
+mg_passes : Process Rate    : 14804.7 kB per cpu second
+-----------------------------------
+mg_perf_hash_build -f alice/alice
+mg_perf_hash_build : 00:00:00.00 cpu, 00:00:00 elapsed.
+-----------------------------------
+mg_compression_dict -f alice/alice -S
+mg_compression_dict : Num words           :     3337 ->     3338
+mg_compression_dict : Num non-words       :      187 ->      188
+mg_compression_dict : Chars of words      :    20849 ->    20849
+mg_compression_dict : Chars of non-words  :     1162 ->     1162
+mg_compression_dict : Mem usage           :    50203 ->    50219
+mg_compression_dict : Actual mem required :    27949
+mg_compression_dict : 00:00:00.00 cpu, 00:00:00 elapsed.
+-----------------------------------
+/home/jobin/Downloads/mg-1.3.64x.1/src/text/mg_get alice -text | mg_passes -f alice/alice -2 -c 3 -G -t 10 -T2 -I2
+ivf.pass2 : M
+mg_passes : Compressed Text 0.04 Mb ( 39601 bytes   26.122 %)
+mg_passes : Words portion of the dictionary 0.02 Mb ( 20306 bytes   13.394 %)
+mg_passes : Huffman info for chars in dictionary 0.00 Mb ( 1012 bytes   0.668 %)
+ivf.pass2 : File sizes
+ivf.pass2 :   Chunk desc    :       2246 bytes
+ivf.pass2 :   Chunk trans   :       3035 bytes
+ivf.pass2 :   Chunks        :          0 bytes
+ivf.pass2 :   Chunk state   :       8192 bytes
+ivf.pass2 :   Invf state    :      36864 bytes
+ivf.pass2 :   Peak invf     :      24576 bytes
+ivf.pass2 :   Final invf    :      19580 bytes
+ivf.pass2 : Peak disk usage :     382.60 %
+ivf.pass2 : Pass two data structures      :  0.019 Mbyte
+ivf.pass2 : Pass two hash structure(s)    :  0.013 Mbyte
+ivf.pass2 : Peak extra memory in use      :  0.050 Mbyte
+ivf.pass2 : Peak total memory in use      :  0.082 Mbyte
+mg_passes : 
+mg_passes :                 :    init         process        done
+mg_passes : text.pass2      : 00:00:00.00   00:00:00.00   00:00:00.00
+mg_passes : ivf.pass2       : 00:00:00.00   00:00:00.01   00:00:00.00
+mg_passes : 
+mg_passes : Init time       : 00:00:00.00 cpu, 00:00:00 elapsed.
+mg_passes : Process time    : 00:00:00.01 cpu, 00:00:00 elapsed.
+mg_passes : Done time       : 00:00:00.00 cpu, 00:00:00 elapsed.
+mg_passes : Total time      : 00:00:00.01 cpu, 00:00:00 elapsed.
+mg_passes : Documents       : 835
+mg_passes : Bytes received  : 152435
+mg_passes : Bytes processed : 151600
+mg_passes : Process Rate    : 14804.7 kB per cpu second
+-----------------------------------
+mg_weights_build -f alice/alice -b 6
+mg_weights_build : The file "alice/alice.weight" does not exist.
+mg_weights_build : Building the weight data from the file "alice/alice.invf".
+.
+L = 2.930395
+U = 68.928642
+B = 1.050580
+mg_weights_build : Warning: Document 33 had a weight of 0.
+mg_weights_build : Warning: Document 34 had a weight of 0.
+mg_weights_build : Warning: Document 35 had a weight of 0.
+mg_weights_build : Warning: Document 43 had a weight of 0.
+mg_weights_build : Warning: Document 44 had a weight of 0.
+mg_weights_build : Warning: Document 45 had a weight of 0.
+mg_weights_build : Warning: Document 223 had a weight of 0.
+mg_weights_build : Warning: Document 224 had a weight of 0.
+mg_weights_build : Warning: Document 225 had a weight of 0.
+mg_weights_build : 00:00:00.00 cpu, 00:00:00 elapsed.
+-----------------------------------
+mg_invf_dict -f alice/alice -b 4096
+mg_invf_dict : Block size = 4096
+mg_invf_dict : Number of blocks written = 10
+-----------------------------------
+mgstat -f alice/alice -E
+Input bytes                        :     151600,     0.14 Mbyte
+Documents                          :        835
+Words in collection [dict]         :      27785
+Longest doc in collection [dict]   :       1260 characters
+Maximum ratio                      :       6.22
+Words in dict                      :       3337
+Non-words in dict                  :        187
+Total chars of distinct words      :      20849
+Total chars of distinct non-words  :       1162
+Words in collection [stem]         :      27655
+Words in stem                      :       2180
+Indexed fragments                  :        835
+Total chars of stem words          :      13940
+
+The collection is in "/home/jobin/Downloads/mg-1.3.64x.1/test/mgdata/alice"
+
+		Files required by mgquery
+alice.text                         :      39601 bytes    26.122%
+alice.invf                         :      19580 bytes    12.916%
+alice.text.idx.wgt                 :       6692 bytes     4.414%
+alice.weight.approx                :        649 bytes     0.428%
+alice.invf.dict.blocked            :      39089 bytes    25.784%
+alice.text.dict                    :      21318 bytes    14.062%
+SUB TOTAL                          :     126929 bytes    83.726%
+
+		Files NOT required by mgquery
+alice.invf.dict                    :      27530 bytes    18.160%
+alice.invf.idx                     :       8728 bytes     5.757%
+alice.text.stats                   :      53755 bytes    35.458%
+alice.text.idx                     :       3372 bytes     2.224%
+alice.weight                       :       3344 bytes     2.206%
+alice.invf.chunk                   :       2246 bytes     1.482%
+alice.invf.chunk.trans             :       3035 bytes     2.002%
+alice.invf.dict.hash               :      16336 bytes    10.776%
+SUB TOTAL                          :     118346 bytes    78.065%
+
+TOTAL                              :     245275 bytes   161.791%
+-----------------------------------
+/home/jobin/Downloads/mg-1.3.64x.1/src/text/mg_get alice -cleanup
+-----------------------------------
+debian-xw9400, Mon Jul 16 15:09:42 EDT 2018
+-----------------------------------
+-- The fast-loading compression dictionary has not been built.
+-- If you wish to build it, execute the following command:
+-- /home/jobin/Downloads/mg-1.3.64x.1/src/text/mg_fast_comp_dict -f alice/alice
+-----------------------------------
+

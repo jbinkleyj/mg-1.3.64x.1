@@ -1,0 +1,14 @@
+
+
+		-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+/home/jobin/Downloads/mg-1.3.64x.1/src/text/mg_passes -f alice/alice -2 -m 32 -s 3 -G -t 10 -T1 -I1 
+
+    151600 bytes |    835 docs |  0.500 Mb | 00:00:00.01 cpu, 00:00:00 elapsed.
+
+
+		-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+/home/jobin/Downloads/mg-1.3.64x.1/src/text/mg_passes -f alice/alice -2 -c 3 -G -t 10 -T2 -I2 
+
+    151600 bytes |    835 docs |  0.367 Mb | 00:00:00.01 cpu, 00:00:00 elapsed.

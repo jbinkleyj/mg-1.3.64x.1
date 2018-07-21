@@ -1,4 +1,4 @@
-CC = icc
+CC = gcc
 CFLAGS = -g -O2 
 CPPFLAGS = 
 INCLUDES = -I..
@@ -16,6 +16,8 @@ COMPILE = $(CC) -c $(COMPILEFLAGS)
 	$(COMPILE) $<
 
 all: simple_sum
+
+check:
 
 dist:
 	ln $(DISTFILES) $(distdir)

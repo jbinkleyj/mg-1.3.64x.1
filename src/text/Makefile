@@ -21,41 +21,41 @@
 #
 ###########################################################################
 
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
+PACKAGE = mg
+VERSION = 1.3.64x
 
 SHELL = /bin/sh
-VPATH = @srcdir@
-exec_prefix = @exec_prefix@
-prefix = @prefix@
-srcdir = @srcdir@
+
+exec_prefix = ${prefix}
+prefix = /home/jobin/Downloads/mg-1.3.64x.1
+srcdir = .
 subdir = src/text
-top_srcdir = @top_srcdir@
-transform = @program_transform_name@
+top_srcdir = ../..
+transform = s,x,x,
 
-CC = @CC@
-CFLAGS = @CFLAGS@ -lreadline -lhistory -lncurses -lreadline -lhistory -lncurses
-CPPFLAGS = @CPPFLAGS@
+CC = gcc
+CFLAGS = -g -O2 -lreadline -lhistory -lncurses -lreadline -lhistory -lncurses
+CPPFLAGS = 
 
 ##########################################
-# DEFS = @DEFS@
+# DEFS = -DHAVE_CONFIG_H
 # Uncomment for compiling for the nzdl project
-DEFS = @DEFS@ -DNZDL
+DEFS = -DHAVE_CONFIG_H -DNZDL
 ##########################################
 
-INSTALL = @INSTALL@
-INSTALL_DATA = @INSTALL_DATA@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
-LDFLAGS = @LDFLAGS@
+INSTALL = /usr/bin/install -c
+INSTALL_DATA = ${INSTALL} -m 644
+INSTALL_PROGRAM = ${INSTALL}
+LDFLAGS = 
 LIBMG = ../../lib/libmg.a
-LIBS = -L$(prefix)/lib $(LIBMG) $(LIBREADLINE) $(LIBTERMCAP) @LIBS@
+LIBS = -L$(prefix)/lib $(LIBMG) $(LIBREADLINE) $(LIBTERMCAP) -lreadline -ltermcap -lm 
 
 # These two variables allow make-time overriding of configure settings:
 LIBREADLINE =
 LIBTERMCAP = 
 
 TOUCH = echo timestamp >
-AWK = @AWK@
+AWK = gawk
 
 bindir = $(exec_prefix)/bin
 datadir = $(prefix)/share
@@ -72,8 +72,8 @@ LINK = $(CC) $(COMPILEFLAGS) $(LDFLAGS) -o $@
 .c.o:
 	$(COMPILE) $<
 
-ANSI2KNR = @ANSI2KNR@
-o = .@U@o
+ANSI2KNR = 
+o = .o
 
 .SUFFIXES: ._c ._o
 .c._c:

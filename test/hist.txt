@@ -1,0 +1,509 @@
+    1  exit
+    2  code
+    3  xclock
+    4  su - root
+    5  su - root
+    6  su - root
+    7  xclock
+    8  more /etc/inittab
+    9  su - root
+   10  man top
+   11  atop
+   12  man atop
+   13  vmstat 
+   14  vmstat 5 5
+   15  memstat
+   16  man vmstat
+   17  mpstat
+   18  su - root
+   19  exit
+   20  exit
+   21  ifconfig
+   22  ipconfig
+   23  su - root
+   24  su - root
+   25  su - root
+   26  more /etc/gdm3/daemon.conf
+   27  more /etc/gdm3/greeter.dconf-defaults
+   28  histoyr
+   29  history
+   30  more /etc/X11/xorg.conf
+   31  more /etc/init.d/gdm3
+   32  history >> hist.jobin.txt
+   33  su - root
+   34  su root
+   35  pwd
+   36  ls
+   37  mkdir Software
+   38  cd Software
+   39  apt-get install git live-build cdebootstrap
+   40  sudo apt-get install git live-build cdebootstrap
+   41  git clone git://git.kali.org/live-build-config.git
+   42  cd live-build-config
+   43  ./build.sh --distribution kali-rolling --verbose
+   44  sudo apt-get install git  cdebootstrap
+   45  more build.sh 
+   46  sudo ./build.sh --distribution kali-rolling --verbose
+   47  more build.sh 
+   48  man dpkg
+   49  su - root
+   50  df -k
+   51  echo 'https://www.youtube.com/watch?v=J7UbHlCPUU0'
+   52  history
+   53  history >> hist.txt
+   54  docker run hello-world
+   55  sudo docker run hello-world
+   56  su - root
+   57  docker run hello-world
+   58  docker run -it ubuntu bash
+   59  history
+   60  docker run hello-world
+   61  user
+   62  userid
+   63  more /etc/groups
+   64  gcloud init
+   65  su - root
+   66  cd Down*
+   67  ls
+   68  ls *.txt
+   69  git clone https://github.com/adobe-fonts/source-sans-pro.git
+   70  conky -C > ~/.config/conky/conky.conf
+   71  vi ~/.config/conky/conky.conf
+   72  df -k
+   73  iesd
+   74  hdutil
+   75  su - root
+   76  su  - root
+   77  vi ~/.config/conky/conky.conf
+   78  vi ~/.config/autostart/conky.desktop
+   79  vi ~/.config/conky/conky.conf
+   80  dmesg | more
+   81  vi ${HOME}/.conkyrc
+   82  ls -alt
+   83  mv  .conkyrc  make_conkyrc.sh
+   84  vi  make_conkyrc.sh
+   85  sh  make_conkyrc.sh
+   86  more .conkyrc
+   87  mkdir -p ~/.config/autostart
+   88  cat <<EOF > ~/.config/autostart/conky.desktop
+   89  [Desktop Entry]
+   90  Type=Application
+   91  Exec=/usr/bin/conky
+   92  Hidden=false
+   93  NoDisplay=false
+   94  X-GNOME-Autostart-enabled=true
+   95  Name=conky
+   96  Comment=
+   97  EOF
+   98  more ~/.config/autostart/conky.desktop
+   99  ifconfig
+  100  ipconfig
+  101  export NETWORK_INTERFACE=enp0s9
+  102  more ~/.conkyrc
+  103  sudo reboot
+  104  history
+  105  more  ~/.conkyrc
+  106  history
+  107  export NETWORK_INTERFACE=enp0s9
+  108  cat <<EOF > ~/.conkyrc
+  109  conky.config = {
+  110    use_spacer = 'left',
+  111    pad_percents = 3,
+  112    background = false,
+  113    double_buffer = true,
+  114    font = 'DejaVu Sans Mono:size=10',
+  115    use_xft = true,
+  116    alignment = 'top_right',
+  117    gap_x = 10,
+  118    gap_y = 40,
+  119    own_window_argb_visual = true,
+  120    own_window_argb_value = 0,
+  121    own_window_type = 'normal',
+  122    own_window_hints = 'undecorated,below,skip_taskbar,skip_pager,sticky',
+  123    own_window = true,
+  124    update_interval = 5.0,
+  125  }
+  126  conky.text = [[
+  127  \${color orange}Hostname: \${color}\${nodename}
+  128  \${color orange}Kernel:   \${color}\${sysname} \${kernel} on \${machine}
+  129  \${color orange}Uptime:   \${color}\${uptime}
+  130  \${exec /usr/lib/update-notifier/apt-check --human-readable}
+  131  \${hr}
+  132  \${color orange}CPU:\${color} \${freq_g} GHz
+  133  \${color orange}1:\${color} \${cpu cpu1}% \${cpubar cpu1}
+  134  \${cpugraph}
+  135  \${color orange}Name              PID   CPU%   MEM%
+  136  \${color lightgrey} \${top name 1} \${top pid 1} \${top cpu 1} \${top mem 1}
+  137  \${color lightgrey} \${top name 2} \${top pid 2} \${top cpu 2} \${top mem 2}
+  138  \${color lightgrey} \${top name 3} \${top pid 3} \${top cpu 3} \${top mem 3}
+  139  \${color lightgrey} \${top name 4} \${top pid 4} \${top cpu 4} \${top mem 4}
+  140  \${color orange}Load average: \${color}\${loadavg}
+  141  \${color orange}Processes: \${color}\${processes} \\
+  142  \${color orange}Running:\${color} \${running_processes}
+  143  \${hr}
+  144  \${color orange}RAM:  \${color}\${mem}/\${memmax}
+  145  \${memperc}% \${membar 4}
+  146  \${color orange}Swap: \${color}\${swap}/\${swapmax}
+  147  \${swapperc}% \${swapbar 4}
+  148  \${memgraph}
+  149  \${hr}
+  150  \${color orange}/ \${color}\${fs_used /}/\${fs_size /} \${fs_bar 6 /}
+  151  \${hr}
+  152  \${color orange}IP:   \${color}\${addr ${NETWORK_INTERFACE}}
+  153  \${color orange}Up:   \${color}\${upspeed ${NETWORK_INTERFACE}}
+  154  \${color orange}Down: \${color}\${downspeed ${NETWORK_INTERFACE}}
+  155  ]]
+  156  EOF
+  157  history .>> conky_hist.txt
+  158  history >> conky_hist.txt
+  159  more  conky_hist.txt
+  160  more  ~/.conkyrc
+  161  reboot
+  162  sudo reboot
+  163  su - root
+  164  /usr/bin/conky
+  165  ps -ef
+  166  cill 2003 
+  167  kill 2003 
+  168  kill 2012
+  169  ps -ef
+  170  /usr/bin/conky
+  171  ps -ef
+  172  kill 2043
+  173  /usr/bin/conky
+  174  vi ~./config/conky/conky.conf
+  175  history
+  176  vi  ~/.config/conky/conky.conf
+  177  ls -alt
+  178  mv .conkyrc .conkyrc.save
+  179  vi  ~/.config/conky/conky.conf
+  180  cp  ~/.config/conky/conky.conf ~/.config/conky/conky.conf.working
+  181  vi  ~/.config/conky/conky.conf
+  182  cp  ~/.config/conky/conky.conf ~/.config/conky/conky.conf.working2
+  183  vi  ~/.config/conky/conky.conf
+  184  ping 192.168.1.9
+  185  netstat -tanp
+  186  vi conly_q.txt
+  187  top
+  188  exit
+  189  ls
+  190  exit
+  191  su - root
+  192  cd partit*
+  193  ls
+  194  cd conky
+  195  ls
+  196  vi c*
+  197  ls -alt
+  198  cd Ver*
+  199  ls -alt
+  200  cd Virt*
+  201  ls
+  202  ls -alt
+  203  ls -alt MacOSx10_7_Lion
+  204  ls -alt MacOSx10_7_Lion2
+  205  ls -alt\'
+  206  ls -alt
+  207  rf -rf MacOSx10_7_Lion2
+  208  rm -rf MacOSx10_7_Lion2
+  209  ls -alr | more
+  210  cd VirtualBox*
+  211  ls
+  212  ls -alt MacOSx10_7_Lion
+  213  rm -rf MacOSx10_7_Lion
+  214  cd MacOSx10_7_Lion
+  215  ls -alt
+  216  ls ..
+  217  ls
+  218  cp * ../MacOSx10_7_Lion2
+  219  cd 
+  220  df -k
+  221  pwd
+  222  ls
+  223  cd Virt*
+  224  ls -alt
+  225  cd Kali
+  226  ls
+  227  exit
+  228  cd Virt*
+  229  ls
+  230  cd debian9*
+  231  ls -alt
+  232  df -k
+  233  more /etc/fstab
+  234  blkid
+  235  su - root
+  236  su bash
+  237  sudo bash
+  238  exit
+  239  cd Virt*
+  240  ls
+  241  ls -alt
+  242  df -k
+  243  ls
+  244  rm Kali
+  245  rmdir Kali
+  246  ls
+  247  cd *Lion
+  248  ls
+  249  ls -alt
+  250  cd ..
+  251  ls -al 
+  252  rm -rf MacOSx10_7_Lion
+  253  df -k
+  254  df -l
+  255  ls -alt
+  256  history
+  257  cd
+  258  ls
+  259  cd Downloads
+  260  ls
+  261  ls -alt
+  262  pwd
+  263  df -k
+  264  cd ..
+  265  ls -alt
+  266  ls -alt | more
+  267  more  .profile  .bashrc .bash_logout .local  .vscode .kde  .sugar 
+  268  ls -alR .local  .vscode .kde  .sugar 
+  269  ls -alR .local  .vscode .kde  .sugar | more
+  270  df -k
+  271  sudo bash
+  272  ls
+  273  ls -alt
+  274  ls -alt | more
+  275  ls Downloads
+  276  cd Downloads
+  277  ls
+  278  ls -alt | more
+  279  df -k
+  280  ls *.deb
+  281  rm -rf *.deb
+  282  df -k
+  283  ls -alt
+  284  ls -alt | more
+  285  uame  -a
+  286  uname -a
+  287  sudo bash
+  288  env
+  289  env | more
+  290  id
+  291  busybox --list-modules 
+  292  busybox --list-modules | more
+  293  busybox --list-modules | grep more
+  294  df -k
+  295  sudo bash
+  296  ftp://ftp.mkp.com/pub/Sayood/
+  297  ftp ftp.mkp.com/pub/Sayood/
+  298  cd Downloads
+  299  ls
+  300  ls m*
+  301  history | grep tar
+  302  tar -xvf mg-1.2.tar.gz 
+  303  cd mg-1.2
+  304  ls
+  305  ls -alt
+  306  git init
+  307  echo "# mg-1.2" >> README.md
+  308  git ad README.md
+  309  git add README.md
+  310  it commit -m "first commit"
+  311  git remote add origin git@github.com:jbinkleyj/mg-1.2.git
+  312  git push -u origin master
+  313  ls .git
+  314  more .git/config
+  315  git push  origin master
+  316  history
+  317  git commit -m "first commit"
+  318  git push -u origin master
+  319  history | tail -20
+  320  history | tail -20 >> README.md
+  321  git commit -m "readm commit"
+  322  git add .
+  323  git commit -m "readm commit"
+  324  git push -u origin master
+  325  git push  origin master
+  326  ls -alt
+  327  ls -al ~/.ssh
+  328  ls -al ~/.ssh/known_hosts
+  329  more ~/.ssh/known_hosts
+  330  ssh-keygen -t rsa -b 4096 -C "jbinkley@hargray.com"
+  331  eval "$(ssh-agent -s)"
+  332  ssh-add ~/.ssh/id_rsa
+  333  sudo apt-get install xclip
+  334  xclip -sel clip < ~/.ssh/id_rsa.pub
+  335  git push  origin master
+  336  git add .
+  337  git commit -m "ssh commit"
+  338  history | tail -20 >> README.md
+  339  git add .
+  340  git commit -m "ssh commit"
+  341  git push  origin master
+  342  vim README.md
+  343  git add .
+  344  git commit -m "ssh commit"
+  345  git push  origin master
+  346  more .git/config
+  347  sudo docker images
+  348  docker ps -a | awk '/Exit/ {print $1}' | xargs docker rm
+  349  docker images
+  350  docker images -a
+  351  ocker ps -q -a 
+  352  docker ps -q -a 
+  353  docker ps -q 
+  354  docker ps -a
+  355  docker ps -q -a | xargs docker rm
+  356  df -k
+  357  docker ps -q -a
+  358  docker ps -q 
+  359  docker ps -a 
+  360  docker images -a
+  361  docker rm $(docker ps -a -q)
+  362  docker rm $(docker ps -aq)
+  363  docker images
+  364  docker rmi $(docker images -f "dangling=true" -q)
+  365  docker ps -l -q
+  366  docker ps -a
+  367  docker ps -a -q
+  368  docker images -q
+  369  docker rmi $(docker images -q | grep -v amazon)
+  370  docker images -q
+  371  docker images
+  372  docker images -a
+  373  docker images
+  374  docker image
+  375  docker images
+  376  df -k
+  377  docker images -viz
+  378  docker ps -a -f
+  379  docker ps -a 
+  380  cd ..
+  381  ls mg*
+  382  cd mg-1.3.64x.1
+  383  ls
+  384  git init
+  385  echo "" >> README.md
+  386  echo "# mg-1.3.64x.1" >> README.md
+  387  history
+  388  git add .
+  389  git commit -m "first commit"
+  390  git remote add origin git@github.com:jbinkleyj/mg-1.3.64x.1.git
+  391  git push -u origin master
+  392  ./config
+  393  ./configure
+  394  ls
+  395  make
+  396  cmake
+  397  make
+  398  gvim Makefile
+  399  vim Makefile
+  400  sudo apt-get install gvim -y
+  401  gvim
+  402  which vim
+  403  ls /usr/bin/*vi*
+  404  ls
+  405  more long*
+  406  ls -alt
+  407  more Makefile
+  408  make
+  409  sudo apt-get install autoheader -y
+  410  ls
+  411  cd Sam*
+  412  ls
+  413  cd bib*
+  414  ls
+  415  make
+  416  ls ../..
+  417  cd ../..
+  418  ls *.sh
+  419  more MAKE*.sh
+  420  ls -alt
+  421  more README.mg-1.3x
+  422  sudo apt-get install patch -y
+  423  make
+  424  configure
+  425  ./configure
+  426  make
+  427  sudo apt-get install autoconf -y
+  428  make
+  429  sudo apt-get install bison flex
+  430  make
+  431  ls
+  432  ls -alt | more
+  433  ls lib
+  434  ls *.patch
+  435  patch -p1< mg-1.3.64x.1.patch
+  436  ./configure --prefix=/usr --disable-nls
+  437  make
+  438  make all
+  439  more Makefile
+  440  make clean
+  441  make
+  442  find . -name mgbuild -print
+  443  cd src
+  444  ls -alt
+  445  cd scripts
+  446  ls
+  447  ls -alt
+  448  more mg_get.sh
+  449  cd ..
+  450  ls
+  451  ls text
+  452  cd ..
+  453  ls
+  454  find . -name \*test\* -print
+  455  ls test
+  456  cd test
+  457  make
+  458  ls -alt
+  459  ls simple_sum
+  460  ls simple_sum/*
+  461  ls -alt simple_sum
+  462  simple_sum
+  463  ls
+  464  ./simple_sum
+  465  ls
+  466  ls -alt
+  467  more Makefile
+  468  ls
+  469  more *.sum
+  470  ls -alt
+  471  more r1
+  472  ls -alt
+  473  more Makefile
+  474  ls
+  475  more simple_sum.c
+  476  ls
+  477  more q1
+  478  more q1/fl*
+  479  ls q1
+  480  ls
+  481*  q1
+  482  more q1
+  483  more q2
+  484  more *.len
+  485  ls mgdata
+  486  cd ..
+  487  find . -name  mgdata -print
+  488  ls
+  489  ls docs
+  490  cd docs
+  491  ls
+  492  ls -alt
+  493  make
+  494  more *READ*
+  495  ls
+  496  more mgintro.1
+  497  ls -alt
+  498  cd ..
+  499  cd test
+  500  ls
+  501  simple_sum
+  502  ./simple_sum
+  503  more ./simple_sum.c 
+  504  ls -alt
+  505  ls mgdata
+  506  ls mgdata/alice
+  507  ls -alt mgdata/alice
+  508  date
+  509  history >> hist.txt
